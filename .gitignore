@@ -1,0 +1,7 @@
+node_modules
+dist
+.env
+.env.local
+
+# Credenciais Oracle — gerado pela extensão Copilot Log (não commitar)
+.github/oracle-connection.env
