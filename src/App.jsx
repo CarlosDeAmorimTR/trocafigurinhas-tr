@@ -11,7 +11,6 @@ const C = {
   white: "#FFFFFF", gray: "#6B7280", grayLight: "#F3F4F6",
 };
 
-// ── Logo TR ───────────────────────────────────────────────────
 const TRLogo = ({ size = 32 }) => {
   const dots = Array.from({ length: 16 }, (_, i) => {
     const angle  = (i / 16) * 2 * Math.PI - Math.PI / 2;
@@ -25,17 +24,14 @@ const TRLogo = ({ size = 32 }) => {
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none">
       {dots.map((d, i) => (
         <circle key={i} cx={d.cx} cy={d.cy} r={d.r} fill="#C84B1E">
-          <animate
-            attributeName="opacity" values="1;0.4;1"
-            dur="2.4s" begin={`${d.delay}s`} repeatCount="indefinite"
-          />
+          <animate attributeName="opacity" values="1;0.4;1"
+            dur="2.4s" begin={`${d.delay}s`} repeatCount="indefinite" />
         </circle>
       ))}
     </svg>
   );
 };
 
-// ── Ícone alternante ⚽ / 🏆 ──────────────────────────────────
 function AlternatingIcon({ size = 18 }) {
   const [show, setShow] = useState(0);
   useEffect(() => {
@@ -43,16 +39,12 @@ function AlternatingIcon({ size = 18 }) {
     return () => clearInterval(t);
   }, []);
   return (
-    <span style={{
-      fontSize: size, display: "inline-block",
-      transition: "opacity 0.4s ease",
-    }}>
+    <span style={{ fontSize: size, display: "inline-block", transition: "opacity 0.4s ease" }}>
       {show === 0 ? "⚽" : "🏆"}
     </span>
   );
 }
 
-// ── Estilos globais ───────────────────────────────────────────
 const GlobalStyles = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
@@ -69,7 +61,6 @@ const GlobalStyles = () => (
     ::-webkit-scrollbar-thumb { background: #1A4233; border-radius: 3px; }
     button { cursor: pointer; font-family: inherit; }
     input, textarea, select { font-family: inherit; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -90,52 +81,34 @@ const GlobalStyles = () => (
       0%, 100% { transform: scale(1); }
       50%       { transform: scale(1.06); }
     }
-
     .fade-in    { animation: fadeIn 0.35s ease forwards; }
     .slide-left { animation: fadeSlideLeft  0.3s ease forwards; }
     .slide-right{ animation: fadeSlideRight 0.3s ease forwards; }
-
     .sticker-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
     .sticker-card:hover  { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(0,0,0,0.14) !important; }
     .sticker-card:active { transform: scale(0.96); }
-
     .nav-tab {
-      flex: 1;
-      padding: 16px 8px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-weight: 500;
-      font-size: 14px;
-      color: #6B7280;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      text-align: center;
-      position: relative;
+      flex: 1; padding: 16px 8px; background: none; border: none;
+      border-bottom: 3px solid transparent; font-weight: 500; font-size: 14px;
+      color: #6B7280; transition: all 0.2s ease; white-space: nowrap;
+      text-align: center; position: relative;
     }
     .nav-tab::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 50%;
-      width: 0; height: 3px;
-      background: #C84B1E;
-      border-radius: 2px 2px 0 0;
-      transition: width 0.25s ease, left 0.25s ease;
+      content: ''; position: absolute; bottom: 0; left: 50%;
+      width: 0; height: 3px; background: #C84B1E;
+      border-radius: 2px 2px 0 0; transition: width 0.25s ease, left 0.25s ease;
     }
     .nav-tab.active { color: #C84B1E; font-weight: 700; }
     .nav-tab.active::after { width: 100%; left: 0; }
     .nav-tab:hover:not(.active) { color: #1A4233; background: rgba(26,66,51,0.04); }
-
     .group-btn { transition: all 0.2s ease; }
     .group-btn:hover { transform: translateY(-1px); }
-
     @media (max-width: 640px) {
       .nav-tab { font-size: 12px; padding: 14px 4px; }
     }
   `}</style>
 );
 
-// ── Toast ─────────────────────────────────────────────────────
 function Toast({ message, type = "success", onClose }) {
   useEffect(() => {
     const t = setTimeout(onClose, 3500);
@@ -145,32 +118,28 @@ function Toast({ message, type = "success", onClose }) {
   return (
     <div style={{
       position: "fixed", bottom: "28px", right: "28px",
-      background: bg, color: C.white,
-      padding: "16px 22px", borderRadius: "14px",
-      fontWeight: "600", fontSize: "14px",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
-      zIndex: 9999, animation: "fadeIn 0.3s ease",
-      maxWidth: "340px", display: "flex", alignItems: "center", gap: "10px",
+      background: bg, color: C.white, padding: "16px 22px",
+      borderRadius: "14px", fontWeight: "600", fontSize: "14px",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.25)", zIndex: 9999,
+      animation: "fadeIn 0.3s ease", maxWidth: "340px",
+      display: "flex", alignItems: "center", gap: "10px",
     }}>
       {message}
       <button onClick={onClose} style={{
         background: "rgba(255,255,255,0.2)", border: "none",
-        borderRadius: "6px", color: C.white,
-        padding: "2px 8px", fontSize: "13px",
+        borderRadius: "6px", color: C.white, padding: "2px 8px", fontSize: "13px",
       }}>✕</button>
     </div>
   );
 }
 
-// ── StickerCard ───────────────────────────────────────────────
-function StickerCard({ sticker, mode, isMarked, onToggle }) {
-  const cd    = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
-  const cardBg = isMarked ? (mode === "has" ? C.green : C.orange) : C.white;
+function StickerCard({ sticker, isMarked, onToggle }) {
+  const cd = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
 
   return (
     <button className="sticker-card" onClick={() => onToggle(sticker)} style={{
       background: sticker.is_metallic && !isMarked
-        ? "linear-gradient(135deg,#f5f0e8,#e8d5a3,#f5f0e8)" : cardBg,
+        ? "linear-gradient(135deg,#f5f0e8,#e8d5a3,#f5f0e8)" : (isMarked ? C.green : C.white),
       border: `2px solid ${isMarked ? "transparent" : (sticker.is_metallic ? "#C9A84C" : "#E5E7EB")}`,
       borderRadius: "12px", padding: "12px 8px",
       display: "flex", flexDirection: "column", alignItems: "center", gap: "6px",
@@ -207,8 +176,7 @@ function StickerCard({ sticker, mode, isMarked, onToggle }) {
   );
 }
 
-// ── CountrySection ────────────────────────────────────────────
-function CountrySection({ country, stickers, mode, markedSet, onToggle }) {
+function CountrySection({ country, stickers, markedSet, onToggle }) {
   const cd     = COUNTRY_FLAGS[country] || { flag: "⚽", color: C.green };
   const total  = stickers.length;
   const marked = stickers.filter(s => markedSet.has(String(s.id))).length;
@@ -247,7 +215,7 @@ function CountrySection({ country, stickers, mode, markedSet, onToggle }) {
         border: `1px solid ${C.beigeDeep}`, borderTop: "none",
       }}>
         {stickers.map(s => (
-          <StickerCard key={s.id} sticker={s} mode={mode}
+          <StickerCard key={s.id} sticker={s}
             isMarked={markedSet.has(String(s.id))} onToggle={onToggle} />
         ))}
       </div>
@@ -263,18 +231,32 @@ function LoginScreen() {
   const [name, setName]         = useState("");
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState("");
-  const [success, setSuccess]   = useState("");
+  const [success, setSuccess]   = useState(false);
   const [animDir, setAnimDir]   = useState("slide-left");
+
+  // Após criar conta com sucesso, volta para login após 2s
+  useEffect(() => {
+    if (!success) return;
+    const t = setTimeout(() => {
+      setSuccess(false);
+      setIsNew(false);
+      setEmail("");
+      setPassword("");
+      setName("");
+      setAnimDir("slide-right");
+    }, 2500);
+    return () => clearTimeout(t);
+  }, [success]);
 
   const switchMode = (toNew) => {
     setAnimDir(toNew ? "slide-left" : "slide-right");
-    setError(""); setSuccess("");
+    setError(""); setSuccess(false);
     setIsNew(toNew);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); setError(""); setSuccess("");
+    setLoading(true); setError("");
     try {
       if (isNew) {
         const { data, error: err } = await supabase.auth.signUp({ email, password });
@@ -286,7 +268,7 @@ function LoginScreen() {
             updated_at: new Date().toISOString(),
           });
         }
-        setSuccess("✅ Conta criada! Verifique seu e-mail para confirmar.");
+        setSuccess(true);
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) throw err;
@@ -315,15 +297,12 @@ function LoginScreen() {
         <div style={{ textAlign: "center" }}>
           <div style={{
             fontSize: "80px", marginBottom: "16px",
-            animation: "floatBall 4s ease-in-out infinite",
-            display: "inline-block",
+            animation: "floatBall 4s ease-in-out infinite", display: "inline-block",
           }}>⚽</div>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
             fontSize: "36px", color: C.white, fontWeight: "700", marginBottom: "8px",
-          }}>
-            TrocaFigurinhas
-          </h1>
+          }}>TrocaFigurinhas</h1>
           <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "16px" }}>
             Thomson Reuters · Copa do Mundo 2026
           </p>
@@ -335,11 +314,9 @@ function LoginScreen() {
             { icon: "👥", label: "Colegas TR"          },
           ].map(({ icon, label }) => (
             <div key={label} style={{
-              background: "rgba(255,255,255,0.08)",
-              backdropFilter: "blur(8px)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: "14px", padding: "16px 20px",
-              textAlign: "center", color: C.white,
+              background: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.15)", borderRadius: "14px",
+              padding: "16px 20px", textAlign: "center", color: C.white,
             }}>
               <div style={{ fontSize: "28px", marginBottom: "6px" }}>{icon}</div>
               <p style={{ fontSize: "13px", opacity: 0.85 }}>{label}</p>
@@ -352,106 +329,127 @@ function LoginScreen() {
         </div>
       </div>
 
-      {/* Painel direito — formulário */}
+      {/* Painel direito */}
       <div style={{
         width: "440px", flexShrink: 0, background: C.white,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
-        padding: "48px 40px",
-        boxShadow: "-8px 0 40px rgba(0,0,0,0.2)",
+        padding: "48px 40px", boxShadow: "-8px 0 40px rgba(0,0,0,0.2)",
       }}>
-        {/* Toggle */}
-        <div style={{
-          display: "flex", background: C.grayLight,
-          borderRadius: "12px", padding: "4px", gap: "4px",
-          width: "100%", marginBottom: "32px",
-        }}>
-          {[
-            { label: "🔐 Entrar",      val: false },
-            { label: "🚀 Criar conta", val: true  },
-          ].map(opt => (
-            <button key={String(opt.val)} onClick={() => switchMode(opt.val)} style={{
-              flex: 1, padding: "12px", borderRadius: "10px", border: "none",
-              background: isNew === opt.val
-                ? (opt.val ? C.orange : C.green) : "transparent",
-              color: isNew === opt.val ? C.white : C.gray,
-              fontWeight: isNew === opt.val ? "700" : "500",
-              fontSize: "14px", transition: "all 0.25s ease",
-              boxShadow: isNew === opt.val ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
+
+        {/* ── TELA DE SUCESSO ── */}
+        {success ? (
+          <div className="fade-in" style={{ textAlign: "center", width: "100%" }}>
+            <div style={{
+              fontSize: "72px", marginBottom: "20px",
+              animation: "floatBall 2s ease-in-out infinite", display: "inline-block",
+            }}>🎉</div>
+            <h2 style={{ fontSize: "26px", fontWeight: "800", color: C.green, marginBottom: "10px" }}>
+              Conta criada!
+            </h2>
+            <p style={{ color: C.gray, fontSize: "15px", marginBottom: "24px", lineHeight: 1.6 }}>
+              Seu cadastro foi realizado com sucesso.<br />
+              Redirecionando para o login...
+            </p>
+            <div style={{
+              background: "#D1FAE5", border: "1px solid #6EE7B7",
+              borderRadius: "12px", padding: "14px 18px",
+              color: "#065F46", fontSize: "14px", fontWeight: "600",
             }}>
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Form com animação */}
-        <div key={String(isNew)} className={animDir} style={{ width: "100%" }}>
-          <h2 style={{ fontSize: "24px", fontWeight: "800", color: C.black, marginBottom: "6px" }}>
-            {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
-          </h2>
-          <p style={{ color: C.gray, fontSize: "14px", marginBottom: "28px" }}>
-            {isNew ? "Junte-se aos colegas da TR" : "Entre para gerenciar suas figurinhas"}
-          </p>
-
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-            {isNew && (
-              <div>
-                <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                  Seu nome
-                </label>
-                <input type="text" value={name} onChange={e => setName(e.target.value)}
-                  placeholder="Carlos Silva" required={isNew} style={inputStyle}
-                  onFocus={e => e.target.style.borderColor = C.green}
-                  onBlur={e => e.target.style.borderColor = C.beigeDeep}
-                />
-              </div>
-            )}
-            <div>
-              <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                E-mail Thomson Reuters
-              </label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="seu@thomsonreuters.com" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = C.green}
-                onBlur={e => e.target.style.borderColor = C.beigeDeep}
-              />
+              ✅ Usuário criado com sucesso!
             </div>
-            <div>
-              <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                Senha
-              </label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                placeholder="••••••••" required style={inputStyle}
-                onFocus={e => e.target.style.borderColor = C.green}
-                onBlur={e => e.target.style.borderColor = C.beigeDeep}
-              />
+          </div>
+        ) : (
+          <>
+            {/* Toggle Entrar / Criar conta */}
+            <div style={{
+              display: "flex", background: C.grayLight,
+              borderRadius: "12px", padding: "4px", gap: "4px",
+              width: "100%", marginBottom: "32px",
+            }}>
+              {[
+                { label: "🔐 Entrar",      val: false },
+                { label: "🚀 Criar conta", val: true  },
+              ].map(opt => (
+                <button key={String(opt.val)} onClick={() => switchMode(opt.val)} style={{
+                  flex: 1, padding: "12px", borderRadius: "10px", border: "none",
+                  background: isNew === opt.val
+                    ? (opt.val ? C.orange : C.green) : "transparent",
+                  color: isNew === opt.val ? C.white : C.gray,
+                  fontWeight: isNew === opt.val ? "700" : "500",
+                  fontSize: "14px", transition: "all 0.25s ease",
+                  boxShadow: isNew === opt.val ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
+                }}>
+                  {opt.label}
+                </button>
+              ))}
             </div>
 
-            {error && (
-              <div style={{ background: "#FEF2F2", border: "1px solid #FCA5A5", borderRadius: "10px", padding: "12px 16px", color: "#DC2626", fontSize: "14px" }}>
-                ⚠️ {error}
-              </div>
-            )}
-            {success && (
-              <div style={{ background: "#D1FAE5", border: "1px solid #6EE7B7", borderRadius: "10px", padding: "12px 16px", color: "#065F46", fontSize: "14px" }}>
-                {success}
-              </div>
-            )}
+            {/* Form */}
+            <div key={String(isNew)} className={animDir} style={{ width: "100%" }}>
+              <h2 style={{ fontSize: "24px", fontWeight: "800", color: C.black, marginBottom: "6px" }}>
+                {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
+              </h2>
+              <p style={{ color: C.gray, fontSize: "14px", marginBottom: "28px" }}>
+                {isNew ? "Junte-se aos colegas da TR" : "Entre para gerenciar suas figurinhas"}
+              </p>
 
-            <button type="submit" disabled={loading} style={{
-              padding: "16px", marginTop: "4px",
-              background: loading ? C.gray : (isNew
-                ? `linear-gradient(135deg,${C.orange},#E05A2A)`
-                : `linear-gradient(135deg,${C.green},${C.greenLight})`),
-              color: C.white, border: "none", borderRadius: "12px",
-              fontSize: "16px", fontWeight: "700",
-              boxShadow: loading ? "none" : "0 4px 16px rgba(0,0,0,0.2)",
-              transition: "all 0.2s ease",
-            }}>
-              {loading ? "⏳ Aguarde..." : (isNew ? "🚀 Criar Conta" : "🔐 Entrar")}
-            </button>
-          </form>
-        </div>
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+                {isNew && (
+                  <div>
+                    <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
+                      Seu nome
+                    </label>
+                    <input type="text" value={name} onChange={e => setName(e.target.value)}
+                      placeholder="Carlos Silva" required={isNew} style={inputStyle}
+                      onFocus={e => e.target.style.borderColor = C.green}
+                      onBlur={e => e.target.style.borderColor = C.beigeDeep}
+                    />
+                  </div>
+                )}
+                <div>
+                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
+                    E-mail Thomson Reuters
+                  </label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="seu@thomsonreuters.com" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green}
+                    onBlur={e => e.target.style.borderColor = C.beigeDeep}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
+                    Senha
+                  </label>
+                  <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green}
+                    onBlur={e => e.target.style.borderColor = C.beigeDeep}
+                  />
+                </div>
+
+                {error && (
+                  <div style={{ background: "#FEF2F2", border: "1px solid #FCA5A5", borderRadius: "10px", padding: "12px 16px", color: "#DC2626", fontSize: "14px" }}>
+                    ⚠️ {error}
+                  </div>
+                )}
+
+                <button type="submit" disabled={loading} style={{
+                  padding: "16px", marginTop: "4px",
+                  background: loading ? C.gray : (isNew
+                    ? `linear-gradient(135deg,${C.orange},#E05A2A)`
+                    : `linear-gradient(135deg,${C.green},${C.greenLight})`),
+                  color: C.white, border: "none", borderRadius: "12px",
+                  fontSize: "16px", fontWeight: "700",
+                  boxShadow: loading ? "none" : "0 4px 16px rgba(0,0,0,0.2)",
+                  transition: "all 0.2s ease",
+                }}>
+                  {loading ? "⏳ Aguarde..." : (isNew ? "🚀 Criar Conta" : "🔐 Entrar")}
+                </button>
+              </form>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -466,7 +464,6 @@ export default function App() {
   const [needsSet, setNeedsSet]       = useState(new Set());
   const [pastedSet, setPastedSet]     = useState(new Set());
   const [activeTab, setActiveTab]     = useState("colecao");
-  const [mode, setMode]               = useState("has");
   const [activeGroup, setActiveGroup] = useState("INTRO");
   const [searchTerm, setSearchTerm]   = useState("");
   const [toast, setToast]             = useState(null);
@@ -491,20 +488,6 @@ export default function App() {
     });
   }, []);
 
-  // Coleção
-  const loadCollection = useCallback(async () => {
-    if (!session) return;
-    const uid = session.user.id;
-    const [{ data: h }, { data: n }] = await Promise.all([
-      supabase.from("user_has").select("sticker_id").eq("user_id", uid),
-      supabase.from("user_needs").select("sticker_id").eq("user_id", uid),
-    ]);
-    if (h) setHasSet(new Set(h.map(r => String(r.sticker_id))));
-    if (n) setNeedsSet(new Set(n.map(r => String(r.sticker_id))));
-  }, [session]);
-
-  useEffect(() => { loadCollection(); }, [loadCollection]);
-
   // Coladas (localStorage)
   useEffect(() => {
     if (!session) return;
@@ -513,6 +496,25 @@ export default function App() {
       if (stored) setPastedSet(new Set(JSON.parse(stored)));
     } catch {}
   }, [session]);
+
+  // Coleção — needsSet calculado automaticamente
+  const loadCollection = useCallback(async () => {
+    if (!session || stickers.length === 0) return;
+    const uid = session.user.id;
+    const { data: h } = await supabase
+      .from("user_has")
+      .select("sticker_id")
+      .eq("user_id", uid);
+
+    const newHasSet = new Set(h?.map(r => String(r.sticker_id)) || []);
+    setHasSet(newHasSet);
+
+    // Tudo que não tem marcado e não está colada = precisa
+    const allIds = stickers.map(s => String(s.id));
+    setNeedsSet(new Set(allIds.filter(id => !newHasSet.has(id) && !pastedSet.has(id))));
+  }, [session, stickers, pastedSet]);
+
+  useEffect(() => { loadCollection(); }, [loadCollection]);
 
   // Badge trocas pendentes
   useEffect(() => {
@@ -538,42 +540,49 @@ export default function App() {
     return () => supabase.removeChannel(channel);
   }, [session, loadCollection]);
 
+  // Toggle figurinha — só modo "has" agora
   const toggleSticker = useCallback(async (sticker) => {
     if (!session) return;
     const uid    = session.user.id;
     const sid    = String(sticker.id);
-    const table  = mode === "has" ? "user_has" : "user_needs";
-    const setter = mode === "has" ? setHasSet : setNeedsSet;
-    const curr   = mode === "has" ? hasSet : needsSet;
-    const newSet = new Set(curr);
-    if (newSet.has(sid)) {
-      newSet.delete(sid); setter(newSet);
-      await supabase.from(table).delete().match({ user_id: uid, sticker_id: sticker.id });
-    } else {
-      newSet.add(sid); setter(newSet);
-      await supabase.from(table).upsert({ user_id: uid, sticker_id: sticker.id });
-    }
-  }, [session, mode, hasSet, needsSet]);
+    const newHas = new Set(hasSet);
 
+    if (newHas.has(sid)) {
+      newHas.delete(sid);
+      await supabase.from("user_has").delete().match({ user_id: uid, sticker_id: sticker.id });
+    } else {
+      newHas.add(sid);
+      await supabase.from("user_has").upsert({ user_id: uid, sticker_id: sticker.id });
+    }
+
+    setHasSet(newHas);
+    // Recalcula needs automaticamente
+    const allIds = stickers.map(s => String(s.id));
+    setNeedsSet(new Set(allIds.filter(id => !newHas.has(id) && !pastedSet.has(id))));
+  }, [session, hasSet, stickers, pastedSet]);
+
+  // Toggle colada — também recalcula needs
   const togglePasted = useCallback((sticker) => {
     if (!session) return;
-    const sid    = String(sticker.id);
-    const newSet = new Set(pastedSet);
-    if (newSet.has(sid)) newSet.delete(sid); else newSet.add(sid);
-    setPastedSet(newSet);
-    localStorage.setItem(`pasted-${session.user.id}`, JSON.stringify([...newSet]));
-  }, [session, pastedSet]);
+    const sid       = String(sticker.id);
+    const newPasted = new Set(pastedSet);
+    if (newPasted.has(sid)) newPasted.delete(sid);
+    else newPasted.add(sid);
+    setPastedSet(newPasted);
+    localStorage.setItem(`pasted-${session.user.id}`, JSON.stringify([...newPasted]));
+
+    const allIds = stickers.map(s => String(s.id));
+    setNeedsSet(new Set(allIds.filter(id => !hasSet.has(id) && !newPasted.has(id))));
+  }, [session, pastedSet, stickers, hasSet]);
 
   const scrollGroups = (dir) => {
-    if (groupScrollRef.current) {
+    if (groupScrollRef.current)
       groupScrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
-    }
   };
 
-  const groups           = [...new Set(stickers.map(s => s.group_code))];
-  const groupStickers    = stickers.filter(s => s.group_code === activeGroup);
-  const countries        = [...new Set(groupStickers.map(s => s.country || "Introdução"))];
-  const markedSet        = mode === "has" ? hasSet : needsSet;
+  const groups        = [...new Set(stickers.map(s => s.group_code))];
+  const groupStickers = stickers.filter(s => s.group_code === activeGroup);
+  const countries     = [...new Set(groupStickers.map(s => s.country || "Introdução"))];
   const filteredBySearch = searchTerm
     ? stickers.filter(s =>
         (s.label   || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -584,12 +593,11 @@ export default function App() {
 
   const TABS = [
     { id: "colecao",   label: "📚 Coleção"   },
-    { id: "dashboard", label: "📊 Dashboard"  },
+    { id: "dashboard", label: "📖 Meu Álbum"  },
     { id: "trocas",    label: "🔄 Trocas", badge: pendingTrades },
     { id: "perfil",    label: "👤 Perfil"    },
   ];
 
-  // Loading
   if (loading) return (
     <>
       <GlobalStyles />
@@ -598,10 +606,7 @@ export default function App() {
         alignItems: "center", justifyContent: "center", background: C.green,
       }}>
         <div style={{ textAlign: "center", color: C.white }}>
-          <div style={{
-            fontSize: "56px", marginBottom: "16px",
-            animation: "floatBall 2s ease-in-out infinite", display: "inline-block",
-          }}>⚽</div>
+          <div style={{ fontSize: "56px", marginBottom: "16px", animation: "floatBall 2s ease-in-out infinite", display: "inline-block" }}>⚽</div>
           <p style={{ fontSize: "18px", opacity: 0.8 }}>Carregando...</p>
         </div>
       </div>
@@ -615,85 +620,51 @@ export default function App() {
       <GlobalStyles />
       <div style={{ minHeight: "100vh", background: C.beige }}>
 
-        {/* ── HEADER ── */}
+        {/* HEADER */}
         <header style={{
           background: `linear-gradient(135deg, ${C.green} 0%, #0F2A1F 100%)`,
           position: "sticky", top: 0, zIndex: 100,
           boxShadow: "0 2px 20px rgba(0,0,0,0.2)",
         }}>
           <div style={{
-            maxWidth: "1200px", margin: "0 auto",
-            padding: "0 24px", height: "64px",
-            display: "flex", alignItems: "center",
-            justifyContent: "space-between",
+            maxWidth: "1200px", margin: "0 auto", padding: "0 24px",
+            height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
-            {/* Logo + título */}
-            <div style={{
-              display: "flex", alignItems: "center",
-              gap: "12px", minWidth: 0,
-            }}>
-              <div style={{ flexShrink: 0 }}>
-                <TRLogo size={36} />
-              </div>
-              <div style={{
-                borderLeft: "1px solid rgba(255,255,255,0.25)",
-                paddingLeft: "12px",
-              }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
+              <div style={{ flexShrink: 0 }}><TRLogo size={36} /></div>
+              <div style={{ borderLeft: "1px solid rgba(255,255,255,0.25)", paddingLeft: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <AlternatingIcon size={16} />
                   <span style={{
-                    color: C.white,
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "16px", fontWeight: "700",
-                    whiteSpace: "nowrap",
-                  }}>
-                    TrocaFigurinhas
-                  </span>
+                    color: C.white, fontFamily: "'Playfair Display', serif",
+                    fontSize: "16px", fontWeight: "700", whiteSpace: "nowrap",
+                  }}>TrocaFigurinhas</span>
                 </div>
-                <p style={{
-                  color: "rgba(255,255,255,0.55)",
-                  fontSize: "10px", marginTop: "1px",
-                  whiteSpace: "nowrap",
-                }}>
+                <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "10px", marginTop: "1px", whiteSpace: "nowrap" }}>
                   Thomson Reuters · Copa 2026
                 </p>
               </div>
             </div>
-
-            {/* Botão sair */}
-            <button
-              onClick={() => supabase.auth.signOut()}
-              style={{
-                background: "rgba(255,255,255,0.1)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                borderRadius: "10px", padding: "8px 18px",
-                color: C.white, fontSize: "13px", fontWeight: "600",
-                flexShrink: 0, transition: "background 0.2s",
-              }}
+            <button onClick={() => supabase.auth.signOut()} style={{
+              background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
+              borderRadius: "10px", padding: "8px 18px", color: C.white,
+              fontSize: "13px", fontWeight: "600", flexShrink: 0, transition: "background 0.2s",
+            }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.2)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
-            >
-              Sair
-            </button>
+            >Sair</button>
           </div>
         </header>
 
-        {/* ── NAV TABS ── */}
+        {/* NAV TABS */}
         <nav style={{
-          background: C.white,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          background: C.white, boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
           position: "sticky", top: "64px", zIndex: 99,
         }}>
-          <div style={{
-            maxWidth: "1200px", margin: "0 auto",
-            padding: "0 24px", display: "flex",
-          }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex" }}>
             {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`nav-tab ${activeTab === tab.id ? "active" : ""}`}
-              >
+              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                className={`nav-tab ${activeTab === tab.id ? "active" : ""}`}>
                 {tab.label}
                 {tab.badge > 0 && (
                   <span style={{
@@ -701,19 +672,17 @@ export default function App() {
                     borderRadius: "10px", padding: "2px 7px",
                     fontSize: "11px", fontWeight: "700",
                     animation: "pulse 2s infinite", display: "inline-block",
-                  }}>
-                    {tab.badge}
-                  </span>
+                  }}>{tab.badge}</span>
                 )}
               </button>
             ))}
           </div>
         </nav>
 
-        {/* ── CONTEÚDO ── */}
+        {/* CONTEÚDO */}
         <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "28px 24px" }}>
 
-          {/* ── ABA COLEÇÃO ── */}
+          {/* ABA COLEÇÃO */}
           {activeTab === "colecao" && (
             <div className="fade-in">
 
@@ -726,9 +695,9 @@ export default function App() {
               }}>
                 {[
                   { label: "Total no álbum", value: stickers.length, color: "#93C5FD" },
-                  { label: "Repetidas",       value: hasSet.size,     color: "#4ADE80" },
-                  { label: "Faltam",          value: needsSet.size,   color: "#FB923C" },
-                  { label: "Coladas",         value: pastedSet.size,  color: "#FCD34D" },
+                  { label: "Tenho repetida", value: hasSet.size,     color: "#4ADE80" },
+                  { label: "Faltam",         value: needsSet.size,   color: "#FB923C" },
+                  { label: "Coladas",        value: pastedSet.size,  color: "#FCD34D" },
                 ].map(({ label, value, color }) => (
                   <div key={label} style={{ textAlign: "center" }}>
                     <div style={{ color, fontSize: "30px", fontWeight: "800", lineHeight: 1 }}>{value}</div>
@@ -737,60 +706,25 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Botões Tenho / Preciso */}
-              <div style={{ marginBottom: "24px" }}>
-                <p style={{
-                  fontSize: "13px", fontWeight: "600", color: C.gray,
-                  marginBottom: "10px", textTransform: "uppercase", letterSpacing: "0.5px",
-                }}>
-                  O que você quer marcar?
-                </p>
-                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-                  {/* Tenho repetida */}
-                  <button onClick={() => setMode("has")} style={{
-                    flex: 1, minWidth: "180px", padding: "18px 24px",
-                    borderRadius: "14px", border: `3px solid ${mode === "has" ? C.green : "#E5E7EB"}`,
-                    background: mode === "has"
-                      ? `linear-gradient(135deg,${C.green},${C.greenLight})` : C.white,
-                    color: mode === "has" ? C.white : C.gray,
-                    fontWeight: "700", fontSize: "16px",
-                    boxShadow: mode === "has"
-                      ? "0 6px 20px rgba(26,66,51,0.35)" : "0 2px 8px rgba(0,0,0,0.06)",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-                    transform: mode === "has" ? "translateY(-2px)" : "translateY(0)",
-                    transition: "all 0.25s ease",
-                  }}>
-                    <span style={{ fontSize: "24px" }}>✅</span>
-                    <div style={{ textAlign: "left" }}>
-                      <div>Tenho repetida</div>
-                      <div style={{ fontSize: "12px", opacity: 0.8, fontWeight: "400" }}>
-                        {hasSet.size} marcada(s)
-                      </div>
-                    </div>
-                  </button>
-
-                  {/* Preciso */}
-                  <button onClick={() => setMode("needs")} style={{
-                    flex: 1, minWidth: "180px", padding: "18px 24px",
-                    borderRadius: "14px", border: `3px solid ${mode === "needs" ? C.orange : "#E5E7EB"}`,
-                    background: mode === "needs"
-                      ? `linear-gradient(135deg,${C.orange},#E05A2A)` : C.white,
-                    color: mode === "needs" ? C.white : C.gray,
-                    fontWeight: "700", fontSize: "16px",
-                    boxShadow: mode === "needs"
-                      ? "0 6px 20px rgba(200,75,30,0.35)" : "0 2px 8px rgba(0,0,0,0.06)",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-                    transform: mode === "needs" ? "translateY(-2px)" : "translateY(0)",
-                    transition: "all 0.25s ease",
-                  }}>
-                    <span style={{ fontSize: "24px" }}>❌</span>
-                    <div style={{ textAlign: "left" }}>
-                      <div>Preciso</div>
-                      <div style={{ fontSize: "12px", opacity: 0.8, fontWeight: "400" }}>
-                        {needsSet.size} marcada(s)
-                      </div>
-                    </div>
-                  </button>
+              {/* Info box — substituiu os botões Tenho/Preciso */}
+              <div style={{
+                background: C.white, borderRadius: "14px", padding: "16px 20px",
+                marginBottom: "24px", border: `2px solid ${C.green}`,
+                display: "flex", alignItems: "center", gap: "14px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+              }}>
+                <span style={{ fontSize: "28px" }}>✅</span>
+                <div>
+                  <p style={{ fontWeight: "700", fontSize: "15px", color: C.green }}>
+                    Marque as figurinhas que você tem repetidas
+                  </p>
+                  <p style={{ fontSize: "13px", color: C.gray, marginTop: "2px" }}>
+                    As que você <strong>não marcar</strong> serão automaticamente consideradas como <strong>faltam</strong>
+                  </p>
+                </div>
+                <div style={{ marginLeft: "auto", textAlign: "center", flexShrink: 0 }}>
+                  <div style={{ fontSize: "22px", fontWeight: "800", color: C.green }}>{hasSet.size}</div>
+                  <div style={{ fontSize: "11px", color: C.gray }}>marcadas</div>
                 </div>
               </div>
 
@@ -802,11 +736,10 @@ export default function App() {
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   style={{
-                    width: "100%", padding: "14px 18px",
-                    borderRadius: "12px", border: `2px solid ${C.beigeDeep}`,
-                    fontSize: "15px", background: C.white, outline: "none",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                    transition: "border-color 0.2s, box-shadow 0.2s",
+                    width: "100%", padding: "14px 18px", borderRadius: "12px",
+                    border: `2px solid ${C.beigeDeep}`, fontSize: "15px",
+                    background: C.white, outline: "none",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)", transition: "border-color 0.2s, box-shadow 0.2s",
                   }}
                   onFocus={e => { e.target.style.borderColor = C.green; e.target.style.boxShadow = "0 0 0 3px rgba(26,66,51,0.1)"; }}
                   onBlur={e => { e.target.style.borderColor = C.beigeDeep; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)"; }}
@@ -821,14 +754,14 @@ export default function App() {
                   </p>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: "10px" }}>
                     {filteredBySearch.map(s => (
-                      <StickerCard key={s.id} sticker={s} mode={mode}
-                        isMarked={markedSet.has(String(s.id))} onToggle={toggleSticker} />
+                      <StickerCard key={s.id} sticker={s}
+                        isMarked={hasSet.has(String(s.id))} onToggle={toggleSticker} />
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Grupos com setas */}
+              {/* Grupos */}
               {!searchTerm && (
                 <>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
@@ -837,60 +770,49 @@ export default function App() {
                       border: `2px solid ${C.beigeDeep}`, background: C.white,
                       fontSize: "16px", flexShrink: 0,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s",
                     }}
                       onMouseEnter={e => e.currentTarget.style.background = C.beigeDeep}
                       onMouseLeave={e => e.currentTarget.style.background = C.white}
                     >◀</button>
-
                     <div ref={groupScrollRef} style={{
                       flex: 1, display: "flex", gap: "6px",
-                      overflowX: "auto", scrollbarWidth: "none",
-                      scrollBehavior: "smooth",
+                      overflowX: "auto", scrollbarWidth: "none", scrollBehavior: "smooth",
                     }}>
                       {groups.map(g => (
-                        <button key={g} className="group-btn"
-                          onClick={() => setActiveGroup(g)} style={{
-                            padding: "10px 18px", borderRadius: "10px",
-                            border: "none", flexShrink: 0,
-                            background: activeGroup === g ? C.green : C.white,
-                            color: activeGroup === g ? C.white : C.gray,
-                            fontWeight: activeGroup === g ? "700" : "500",
-                            fontSize: "14px",
-                            boxShadow: activeGroup === g
-                              ? "0 4px 14px rgba(26,66,51,0.3)"
-                              : "0 1px 4px rgba(0,0,0,0.08)",
-                            transition: "all 0.2s",
-                          }}>
+                        <button key={g} className="group-btn" onClick={() => setActiveGroup(g)} style={{
+                          padding: "10px 18px", borderRadius: "10px", border: "none", flexShrink: 0,
+                          background: activeGroup === g ? C.green : C.white,
+                          color: activeGroup === g ? C.white : C.gray,
+                          fontWeight: activeGroup === g ? "700" : "500", fontSize: "14px",
+                          boxShadow: activeGroup === g
+                            ? "0 4px 14px rgba(26,66,51,0.3)" : "0 1px 4px rgba(0,0,0,0.08)",
+                        }}>
                           {GROUP_NAMES[g] || g}
                         </button>
                       ))}
                     </div>
-
                     <button onClick={() => scrollGroups(1)} style={{
                       width: "36px", height: "36px", borderRadius: "10px",
                       border: `2px solid ${C.beigeDeep}`, background: C.white,
                       fontSize: "16px", flexShrink: 0,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "all 0.2s",
                     }}
                       onMouseEnter={e => e.currentTarget.style.background = C.beigeDeep}
                       onMouseLeave={e => e.currentTarget.style.background = C.white}
                     >▶</button>
                   </div>
 
-                  {/* Seções por país */}
                   {["INTRO", "CC"].includes(activeGroup) ? (
                     <CountrySection
                       country={activeGroup === "INTRO" ? "Introdução" : "Especial"}
-                      stickers={groupStickers} mode={mode}
-                      markedSet={markedSet} onToggle={toggleSticker}
+                      stickers={groupStickers}
+                      markedSet={hasSet} onToggle={toggleSticker}
                     />
                   ) : (
                     countries.map(country => (
                       <CountrySection key={country} country={country}
                         stickers={groupStickers.filter(s => (s.country || "Introdução") === country)}
-                        mode={mode} markedSet={markedSet} onToggle={toggleSticker}
+                        markedSet={hasSet} onToggle={toggleSticker}
                       />
                     ))
                   )}
@@ -899,7 +821,7 @@ export default function App() {
             </div>
           )}
 
-          {/* ── ABA DASHBOARD ── */}
+          {/* ABA MEU ÁLBUM */}
           {activeTab === "dashboard" && (
             <div className="fade-in">
               <Dashboard
@@ -912,14 +834,14 @@ export default function App() {
             </div>
           )}
 
-          {/* ── ABA TROCAS ── */}
+          {/* ABA TROCAS */}
           {activeTab === "trocas" && (
             <div className="fade-in">
               <MatchesPage session={session} stickers={stickers} />
             </div>
           )}
 
-          {/* ── ABA PERFIL ── */}
+          {/* ABA PERFIL */}
           {activeTab === "perfil" && (
             <div className="fade-in">
               <ProfilePage
@@ -935,9 +857,7 @@ export default function App() {
         </main>
       </div>
 
-      {toast && (
-        <Toast message={toast.msg} type={toast.type} onClose={() => setToast(null)} />
-      )}
+      {toast && <Toast message={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
     </>
   );
 }
