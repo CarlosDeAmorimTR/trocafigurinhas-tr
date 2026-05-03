@@ -234,7 +234,6 @@ function LoginScreen() {
   const [success, setSuccess]   = useState(false);
   const [animDir, setAnimDir]   = useState("slide-left");
 
-  // Após criar conta com sucesso, volta para login após 2s
   useEffect(() => {
     if (!success) return;
     const t = setTimeout(() => {
@@ -337,7 +336,6 @@ function LoginScreen() {
         padding: "48px 40px", boxShadow: "-8px 0 40px rgba(0,0,0,0.2)",
       }}>
 
-        {/* ── TELA DE SUCESSO ── */}
         {success ? (
           <div className="fade-in" style={{ textAlign: "center", width: "100%" }}>
             <div style={{
@@ -361,7 +359,6 @@ function LoginScreen() {
           </div>
         ) : (
           <>
-            {/* Toggle Entrar / Criar conta */}
             <div style={{
               display: "flex", background: C.grayLight,
               borderRadius: "12px", padding: "4px", gap: "4px",
@@ -385,7 +382,6 @@ function LoginScreen() {
               ))}
             </div>
 
-            {/* Form */}
             <div key={String(isNew)} className={animDir} style={{ width: "100%" }}>
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: C.black, marginBottom: "6px" }}>
                 {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
@@ -509,7 +505,6 @@ export default function App() {
     const newHasSet = new Set(h?.map(r => String(r.sticker_id)) || []);
     setHasSet(newHasSet);
 
-    // Tudo que não tem marcado e não está colada = precisa
     const allIds = stickers.map(s => String(s.id));
     setNeedsSet(new Set(allIds.filter(id => !newHasSet.has(id) && !pastedSet.has(id))));
   }, [session, stickers, pastedSet]);
@@ -540,7 +535,7 @@ export default function App() {
     return () => supabase.removeChannel(channel);
   }, [session, loadCollection]);
 
-  // Toggle figurinha — só modo "has" agora
+  // Toggle figurinha
   const toggleSticker = useCallback(async (sticker) => {
     if (!session) return;
     const uid    = session.user.id;
@@ -556,12 +551,11 @@ export default function App() {
     }
 
     setHasSet(newHas);
-    // Recalcula needs automaticamente
     const allIds = stickers.map(s => String(s.id));
     setNeedsSet(new Set(allIds.filter(id => !newHas.has(id) && !pastedSet.has(id))));
   }, [session, hasSet, stickers, pastedSet]);
 
-  // Toggle colada — também recalcula needs
+  // Toggle colada
   const togglePasted = useCallback((sticker) => {
     if (!session) return;
     const sid       = String(sticker.id);
@@ -706,7 +700,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Info box — substituiu os botões Tenho/Preciso */}
+              {/* ✅ INFO BOX — texto corrigido */}
               <div style={{
                 background: C.white, borderRadius: "14px", padding: "16px 20px",
                 marginBottom: "24px", border: `2px solid ${C.green}`,
@@ -716,10 +710,11 @@ export default function App() {
                 <span style={{ fontSize: "28px" }}>✅</span>
                 <div>
                   <p style={{ fontWeight: "700", fontSize: "15px", color: C.green }}>
-                    Marque as figurinhas que você tem repetidas
+                    Marque as figurinhas que você tem repetidas para trocar
                   </p>
                   <p style={{ fontSize: "13px", color: C.gray, marginTop: "2px" }}>
-                    As que você <strong>não marcar</strong> serão automaticamente consideradas como <strong>faltam</strong>
+                    Figurinhas já coladas no álbum podem ser gerenciadas na aba <strong>Meu Álbum</strong>.
+                    Somente as que não estão coladas e não marcadas aqui serão consideradas como <strong>faltam</strong>.
                   </p>
                 </div>
                 <div style={{ marginLeft: "auto", textAlign: "center", flexShrink: 0 }}>
