@@ -11,7 +11,7 @@ const C = {
   white: "#FFFFFF", gray: "#6B7280", grayLight: "#F3F4F6",
 };
 
-const TRLogo = ({ size = 32 }) => {
+const PVLogo = ({ size = 32 }) => {
   const dots = Array.from({ length: 16 }, (_, i) => {
     const angle  = (i / 16) * 2 * Math.PI - Math.PI / 2;
     const radius = size * 0.38;
@@ -303,14 +303,14 @@ function LoginScreen() {
             fontSize: "36px", color: C.white, fontWeight: "700", marginBottom: "8px",
           }}>TrocaFigurinhas</h1>
           <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "16px" }}>
-            Thomson Reuters · Copa do Mundo 2026
+            Praça Virtual · Copa do Mundo 2026
           </p>
         </div>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
           {[
             { icon: "🔄", label: "Trocas inteligentes" },
             { icon: "🏆", label: "994 figurinhas"      },
-            { icon: "👥", label: "Colegas TR"          },
+            { icon: "👥", label: "Colegas PV"          },
           ].map(({ icon, label }) => (
             <div key={label} style={{
               background: "rgba(255,255,255,0.08)", backdropFilter: "blur(8px)",
@@ -323,8 +323,8 @@ function LoginScreen() {
           ))}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", opacity: 0.7 }}>
-          <TRLogo size={28} />
-          <span style={{ color: C.white, fontSize: "14px", fontWeight: "600" }}>Thomson Reuters</span>
+          <PVLogo size={28} />
+          <span style={{ color: C.white, fontSize: "14px", fontWeight: "600" }}>Praça Virtual</span>
         </div>
       </div>
 
@@ -387,7 +387,7 @@ function LoginScreen() {
                 {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
               </h2>
               <p style={{ color: C.gray, fontSize: "14px", marginBottom: "28px" }}>
-                {isNew ? "Junte-se aos colegas da TR" : "Entre para gerenciar suas figurinhas"}
+                {isNew ? "Junte-se aos colegas da Praça Virtual" : "Entre para gerenciar suas figurinhas"}
               </p>
 
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -405,10 +405,10 @@ function LoginScreen() {
                 )}
                 <div>
                   <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                    E-mail Thomson Reuters
+                    E-mail Praça Virtual
                   </label>
                   <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                    placeholder="seu@thomsonreuters.com" required style={inputStyle}
+                    placeholder="seu@pracavirtual.com.br" required style={inputStyle}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -468,7 +468,6 @@ export default function App() {
 
   const showToast = (msg, type = "success") => setToast({ msg, type });
 
-  // Auth
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session); setLoading(false);
@@ -477,14 +476,12 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Figurinhas
   useEffect(() => {
     supabase.from("stickers").select("*").order("id").then(({ data }) => {
       if (data) setStickers(data);
     });
   }, []);
 
-  // Coladas (localStorage)
   useEffect(() => {
     if (!session) return;
     try {
@@ -493,7 +490,6 @@ export default function App() {
     } catch {}
   }, [session]);
 
-  // Coleção — needsSet calculado automaticamente
   const loadCollection = useCallback(async () => {
     if (!session || stickers.length === 0) return;
     const uid = session.user.id;
@@ -511,7 +507,6 @@ export default function App() {
 
   useEffect(() => { loadCollection(); }, [loadCollection]);
 
-  // Badge trocas pendentes
   useEffect(() => {
     if (!session) return;
     supabase.from("trades").select("id", { count: "exact" })
@@ -520,7 +515,6 @@ export default function App() {
       .then(({ count }) => setPendingTrades(count || 0));
   }, [session]);
 
-  // Realtime
   useEffect(() => {
     if (!session) return;
     const channel = supabase.channel("realtime-all")
@@ -535,7 +529,6 @@ export default function App() {
     return () => supabase.removeChannel(channel);
   }, [session, loadCollection]);
 
-  // Toggle figurinha
   const toggleSticker = useCallback(async (sticker) => {
     if (!session) return;
     const uid    = session.user.id;
@@ -555,7 +548,6 @@ export default function App() {
     setNeedsSet(new Set(allIds.filter(id => !newHas.has(id) && !pastedSet.has(id))));
   }, [session, hasSet, stickers, pastedSet]);
 
-  // Toggle colada
   const togglePasted = useCallback((sticker) => {
     if (!session) return;
     const sid       = String(sticker.id);
@@ -625,7 +617,7 @@ export default function App() {
             height: "64px", display: "flex", alignItems: "center", justifyContent: "space-between",
           }}>
             <div style={{ display: "flex", alignItems: "center", gap: "12px", minWidth: 0 }}>
-              <div style={{ flexShrink: 0 }}><TRLogo size={36} /></div>
+              <div style={{ flexShrink: 0 }}><PVLogo size={36} /></div>
               <div style={{ borderLeft: "1px solid rgba(255,255,255,0.25)", paddingLeft: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <AlternatingIcon size={16} />
@@ -635,7 +627,7 @@ export default function App() {
                   }}>TrocaFigurinhas</span>
                 </div>
                 <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "10px", marginTop: "1px", whiteSpace: "nowrap" }}>
-                  Thomson Reuters · Copa 2026
+                  Praça Virtual · Copa 2026
                 </p>
               </div>
             </div>
@@ -676,11 +668,8 @@ export default function App() {
         {/* CONTEÚDO */}
         <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "28px 24px" }}>
 
-          {/* ABA COLEÇÃO */}
           {activeTab === "colecao" && (
             <div className="fade-in">
-
-              {/* Stats bar */}
               <div style={{
                 background: `linear-gradient(135deg,${C.green},#0F2A1F)`,
                 borderRadius: "16px", padding: "20px 28px", marginBottom: "24px",
@@ -700,7 +689,6 @@ export default function App() {
                 ))}
               </div>
 
-              {/* ✅ INFO BOX — texto corrigido */}
               <div style={{
                 background: C.white, borderRadius: "14px", padding: "16px 20px",
                 marginBottom: "24px", border: `2px solid ${C.green}`,
@@ -723,7 +711,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Busca */}
               <div style={{ marginBottom: "20px" }}>
                 <input
                   type="text"
@@ -741,7 +728,6 @@ export default function App() {
                 />
               </div>
 
-              {/* Resultado busca */}
               {searchTerm && filteredBySearch && (
                 <div className="fade-in">
                   <p style={{ color: C.gray, marginBottom: "16px", fontSize: "14px" }}>
@@ -756,7 +742,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* Grupos */}
               {!searchTerm && (
                 <>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
@@ -816,7 +801,6 @@ export default function App() {
             </div>
           )}
 
-          {/* ABA MEU ÁLBUM */}
           {activeTab === "dashboard" && (
             <div className="fade-in">
               <Dashboard
@@ -829,14 +813,12 @@ export default function App() {
             </div>
           )}
 
-          {/* ABA TROCAS */}
           {activeTab === "trocas" && (
             <div className="fade-in">
               <MatchesPage session={session} stickers={stickers} />
             </div>
           )}
 
-          {/* ABA PERFIL */}
           {activeTab === "perfil" && (
             <div className="fade-in">
               <ProfilePage

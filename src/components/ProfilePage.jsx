@@ -7,7 +7,7 @@ const C = {
   white: "#FFFFFF", gray: "#6B7280", grayLight: "#F3F4F6",
 };
 
-const TRLogo = ({ size = 32 }) => {
+const PVLogo = ({ size = 32 }) => {
   const dots = Array.from({ length: 16 }, (_, i) => {
     const angle  = (i / 16) * 2 * Math.PI - Math.PI / 2;
     const radius = size * 0.38;
@@ -85,8 +85,8 @@ function OfficeCalendar({ userId, readOnly = false }) {
   };
 
   const { first, total, year, month } = getDaysInMonth();
-  const today     = new Date().toISOString().slice(0, 10);
-  const weekDays  = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+  const today      = new Date().toISOString().slice(0, 10);
+  const weekDays   = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
   const monthNames = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 
   return (
@@ -270,11 +270,9 @@ export default function ProfilePage({
 
       {/* Card principal */}
       <div style={{
-        background: C.white,
-        borderRadius: "20px",
+        background: C.white, borderRadius: "20px",
         boxShadow: "0 4px 24px rgba(0,0,0,0.10)",
-        marginBottom: "20px",
-        position: "relative",
+        marginBottom: "20px", position: "relative",
       }}>
 
         {/* Banner verde */}
@@ -282,16 +280,15 @@ export default function ProfilePage({
           height: "130px",
           background: `linear-gradient(135deg, ${C.green} 0%, #0F2A1F 60%, #1A3A2A 100%)`,
           borderRadius: "20px 20px 0 0",
-          position: "relative",
-          overflow: "hidden",
+          position: "relative", overflow: "hidden",
         }}>
           <div style={{
             position: "absolute", top: "14px", right: "20px",
             display: "flex", alignItems: "center", gap: "8px", opacity: 0.4,
           }}>
-            <TRLogo size={22} />
+            <PVLogo size={22} />
             <span style={{ color: C.white, fontSize: "12px", fontWeight: "600" }}>
-              Thomson Reuters
+              Praça Virtual
             </span>
           </div>
           <span style={{ position: "absolute", bottom: "10px", left: "160px", fontSize: "48px", opacity: 0.07 }}>⚽</span>
@@ -300,17 +297,10 @@ export default function ProfilePage({
 
         {/* Avatar */}
         <div style={{
-          position: "absolute",
-          top: "84px",
-          left: "28px",
-          width: "92px",
-          height: "92px",
-          borderRadius: "50%",
-          border: `4px solid ${C.white}`,
-          boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-          overflow: "hidden",
-          background: C.orange,
-          zIndex: 10,
+          position: "absolute", top: "84px", left: "28px",
+          width: "92px", height: "92px", borderRadius: "50%",
+          border: `4px solid ${C.white}`, boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
+          overflow: "hidden", background: C.orange, zIndex: 10,
         }}>
           {profile.avatar_url ? (
             <img src={profile.avatar_url} alt="avatar"
@@ -344,7 +334,6 @@ export default function ProfilePage({
         {/* Corpo */}
         <div style={{ padding: "64px 28px 28px" }}>
 
-          {/* Nome + info */}
           <div style={{ marginBottom: "20px" }}>
             <h2 style={{
               fontSize: "22px", fontWeight: "800", color: C.black,
@@ -377,13 +366,11 @@ export default function ProfilePage({
             </div>
           </div>
 
-          {/* ── Botões de contato — simétricos ── */}
           {(teamsUrl || whatsappUrl) && (
             <div style={{
               display: "grid",
               gridTemplateColumns: teamsUrl && whatsappUrl ? "1fr 1fr" : "1fr",
-              gap: "12px",
-              marginBottom: "20px",
+              gap: "12px", marginBottom: "20px",
             }}>
               {teamsUrl && (
                 <a href={teamsUrl} target="_blank" rel="noreferrer" style={{
@@ -418,7 +405,6 @@ export default function ProfilePage({
             </div>
           )}
 
-          {/* ── Barra de progresso ── */}
           <div style={{
             background: C.grayLight, borderRadius: "12px",
             padding: "14px 18px", marginBottom: "20px",
@@ -443,13 +429,8 @@ export default function ProfilePage({
             </p>
           </div>
 
-          {/* ── Botões Editar / Sair — simétricos ── */}
           {!editing ? (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "12px",
-            }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
               <button onClick={() => setEditing(true)} style={{
                 padding: "13px",
                 background: `linear-gradient(135deg,${C.green},${C.greenLight})`,
@@ -477,9 +458,7 @@ export default function ProfilePage({
               </button>
             </div>
           ) : (
-            <div className="fade-in" style={{
-              background: C.grayLight, borderRadius: "14px", padding: "20px",
-            }}>
+            <div className="fade-in" style={{ background: C.grayLight, borderRadius: "14px", padding: "20px" }}>
               <h3 style={{ fontSize: "15px", fontWeight: "700", color: C.black, marginBottom: "16px" }}>
                 ✏️ Editar perfil
               </h3>
@@ -492,7 +471,7 @@ export default function ProfilePage({
                   <input type="text" value={form.full_name}
                     onChange={e => setForm(f => ({ ...f, full_name: e.target.value }))}
                     placeholder="Seu nome completo"
-                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white, transition: "border-color 0.2s" }}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white }}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -500,12 +479,12 @@ export default function ProfilePage({
 
                 <div>
                   <label style={{ fontSize: "12px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "5px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                    Área na TR
+                    Área na PV
                   </label>
                   <input type="text" value={form.tr_area}
                     onChange={e => setForm(f => ({ ...f, tr_area: e.target.value }))}
                     placeholder="Ex: Jurídico, Fiscal, TI..."
-                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white, transition: "border-color 0.2s" }}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white }}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -518,7 +497,7 @@ export default function ProfilePage({
                   <input type="text" value={form.tr_office}
                     onChange={e => setForm(f => ({ ...f, tr_office: e.target.value }))}
                     placeholder="Ex: São Paulo - Faria Lima"
-                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white, transition: "border-color 0.2s" }}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white }}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -530,8 +509,8 @@ export default function ProfilePage({
                   </label>
                   <input type="email" value={form.teams_email}
                     onChange={e => setForm(f => ({ ...f, teams_email: e.target.value }))}
-                    placeholder="seu@thomsonreuters.com"
-                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white, transition: "border-color 0.2s" }}
+                    placeholder="seu@pracavirtual.com.br"
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white }}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -544,7 +523,7 @@ export default function ProfilePage({
                   <input type="tel" value={form.whatsapp}
                     onChange={e => setForm(f => ({ ...f, whatsapp: e.target.value }))}
                     placeholder="11999999999"
-                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white, transition: "border-color 0.2s" }}
+                    style={{ width: "100%", padding: "11px 14px", borderRadius: "10px", border: `2px solid ${C.beigeDeep}`, fontSize: "14px", outline: "none", background: C.white }}
                     onFocus={e => e.target.style.borderColor = C.green}
                     onBlur={e => e.target.style.borderColor = C.beigeDeep}
                   />
@@ -556,7 +535,7 @@ export default function ProfilePage({
                     background: saving ? C.gray : `linear-gradient(135deg,${C.green},${C.greenLight})`,
                     color: C.white, border: "none", borderRadius: "10px",
                     fontWeight: "700", fontSize: "14px",
-                    boxShadow: "0 4px 12px rgba(26,66,51,0.25)", transition: "all 0.2s",
+                    boxShadow: "0 4px 12px rgba(26,66,51,0.25)",
                   }}>
                     {saving ? "⏳ Salvando..." : "✅ Salvar"}
                   </button>

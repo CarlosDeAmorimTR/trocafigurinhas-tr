@@ -15,18 +15,60 @@ const STATUS_CONFIG = {
   cancelled: { label: 'Cancelada',  color: '#DC2626', bg: '#FEE2E2', icon: '❌' },
 };
 
+// ── Regra de troca justa ──────────────────────────────────────
+// Peso: figurinha especial (is_metallic ou grupo INTRO/CC) = 2, normal = 1
+// Troca é justa se o peso total de cada lado for igual.
+// Exemplos válidos:
+//   1 especial (2) ↔ 1 especial (2)
+//   1 especial (2) ↔ 2 normais  (1+1)
+//   2 especiais(4) ↔ 4 normais  (4)
+//   3 normais  (3) ↔ 3 normais  (3)
+
+function getStickerWeight(sticker) {
+  if (!sticker) return 1;
+  if (sticker.is_metallic) return 2;
+  if (sticker.group_code === "INTRO" || sticker.group_code === "CC") return 2;
+  return 1;
+}
+
+function calcTotalWeight(ids, stickersMap) {
+  return ids.reduce((sum, id) => {
+    const s = stickersMap[String(id)];
+    return sum + getStickerWeight(s);
+  }, 0);
+}
+
+function isFairTrade(iGive, iReceive, stickersMap) {
+  if (!iGive?.length || !iReceive?.length) return false;
+  const weightGive    = calcTotalWeight(iGive,    stickersMap);
+  const weightReceive = calcTotalWeight(iReceive, stickersMap);
+  return weightGive === weightReceive;
+}
+// ─────────────────────────────────────────────────────────────
+
 function MatchCard({ match, currentUserId, stickers, onPropose }) {
-  const [expanded, setExpanded] = useState(false);
-  const [message, setMessage]   = useState('');
+  const [expanded, setExpanded]   = useState(false);
+  const [message, setMessage]     = useState('');
   const [proposing, setProposing] = useState(false);
   const [proposed, setProposed]   = useState(false);
 
+  // Mapa id → sticker para lookup rápido
+  const stickersMap = Object.fromEntries(stickers.map(s => [String(s.id), s]));
+
   const getStickerLabel = (id) => {
-    const s = stickers.find(s => s.id === id);
-    return s ? `#${s.number} ${s.country || ''}`.trim() : `#${id}`;
+    const s = stickersMap[String(id)];
+    if (!s) return `#${id}`;
+    const special = s.is_metallic || s.group_code === "INTRO" || s.group_code === "CC";
+    return `#${s.number}${special ? ' ⭐' : ''} ${s.country || ''}`.trim();
   };
 
+  const fair = isFairTrade(match.i_give, match.i_receive, stickersMap);
+
   const handlePropose = async () => {
+    if (!fair) {
+      alert('⚖️ Troca não é justa!\n\nRegras:\n• 1 especial (⭐) = 2 normais\n• N especiais = N especiais\n• N normais = N normais\n\nAjuste as quantidades para equilibrar a troca.');
+      return;
+    }
     setProposing(true);
     try {
       await supabase.from('trades').insert({
@@ -45,6 +87,9 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
       setProposing(false);
     }
   };
+
+  const weightGive    = calcTotalWeight(match.i_give    || [], stickersMap);
+  const weightReceive = calcTotalWeight(match.i_receive || [], stickersMap);
 
   return (
     <div style={{
@@ -71,7 +116,7 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
 
         <div style={{ flex: 1, minWidth: 0 }}>
           <h4 style={{ fontWeight: '700', fontSize: '16px', color: C.black, marginBottom: '2px' }}>
-            {match.partner_name || 'Colega TR'}
+            {match.partner_name || 'Colega PV'}
           </h4>
           <p style={{ color: C.gray, fontSize: '13px' }}>
             {[match.partner_role, match.partner_city].filter(Boolean).join(' · ')}
@@ -97,7 +142,7 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
             <div style={{ background: '#F0FDF4', borderRadius: '12px', padding: '14px', border: '1px solid #BBF7D0' }}>
               <p style={{ fontWeight: '700', color: C.success, fontSize: '13px', marginBottom: '10px' }}>
-                ✅ Você dá ({match.i_give_count})
+                ✅ Você dá ({match.i_give_count}) · Peso: {weightGive}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '140px', overflowY: 'auto' }}>
                 {(match.i_give || []).map(id => (
@@ -112,7 +157,7 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
             </div>
             <div style={{ background: '#FFF7ED', borderRadius: '12px', padding: '14px', border: '1px solid #FED7AA' }}>
               <p style={{ fontWeight: '700', color: C.orange, fontSize: '13px', marginBottom: '10px' }}>
-                📥 Você recebe ({match.i_receive_count})
+                📥 Você recebe ({match.i_receive_count}) · Peso: {weightReceive}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '140px', overflowY: 'auto' }}>
                 {(match.i_receive || []).map(id => (
@@ -124,6 +169,27 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Indicador de equilíbrio */}
+          <div style={{
+            marginTop: '14px', padding: '10px 14px', borderRadius: '10px',
+            background: fair ? '#D1FAE5' : '#FEF3C7',
+            border: `1px solid ${fair ? '#6EE7B7' : '#FCD34D'}`,
+            display: 'flex', alignItems: 'center', gap: '8px',
+          }}>
+            <span style={{ fontSize: '16px' }}>{fair ? '⚖️✅' : '⚖️⚠️'}</span>
+            <div>
+              <p style={{ fontSize: '13px', fontWeight: '700', color: fair ? '#065F46' : '#92400E' }}>
+                {fair ? 'Troca equilibrada!' : 'Troca desequilibrada'}
+              </p>
+              <p style={{ fontSize: '12px', color: fair ? '#065F46' : '#92400E', marginTop: '2px' }}>
+                {fair
+                  ? `Peso igual dos dois lados (${weightGive} = ${weightReceive})`
+                  : `Você dá peso ${weightGive}, recebe peso ${weightReceive}. Regra: ⭐especial = 2 normais.`
+                }
+              </p>
             </div>
           </div>
 
@@ -139,13 +205,23 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
                   resize: 'vertical', minHeight: '72px', outline: 'none', fontFamily: 'inherit',
                 }}
               />
-              <button onClick={handlePropose} disabled={proposing} style={{
-                width: '100%', marginTop: '10px', padding: '14px',
-                background: proposing ? C.gray : C.orange, color: C.white,
-                border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '15px',
-                cursor: proposing ? 'default' : 'pointer',
-              }}>
-                {proposing ? '⏳ Enviando...' : '🤝 Propor Troca'}
+              <button
+                onClick={handlePropose}
+                disabled={proposing || !fair}
+                style={{
+                  width: '100%', marginTop: '10px', padding: '14px',
+                  background: proposing ? C.gray : (!fair ? '#D1D5DB' : C.orange),
+                  color: !fair ? '#9CA3AF' : C.white,
+                  border: 'none', borderRadius: '12px', fontWeight: '700', fontSize: '15px',
+                  cursor: proposing || !fair ? 'not-allowed' : 'pointer',
+                  transition: 'background 0.2s',
+                }}
+              >
+                {proposing
+                  ? '⏳ Enviando...'
+                  : !fair
+                    ? '⚖️ Equilibre a troca para propor'
+                    : '🤝 Propor Troca'}
               </button>
             </div>
           ) : (
@@ -178,14 +254,12 @@ function TradeCard({ trade, currentUserId, stickers, onRefresh }) {
   const handleConfirm = async () => {
     setConfirming(true);
     try {
-      // 1. Marcar troca como concluída
       await supabase.from('trades').update({
         status: 'done',
         confirmed_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }).eq('id', trade.id);
 
-      // 2. Remover das repetidas de quem deu + das faltantes de quem recebeu
       if (trade.stickers_a_gives?.length > 0) {
         await supabase.from('user_has').delete()
           .eq('user_id', trade.user_a).in('sticker_id', trade.stickers_a_gives);
@@ -199,20 +273,15 @@ function TradeCard({ trade, currentUserId, stickers, onRefresh }) {
           .eq('user_id', trade.user_a).in('sticker_id', trade.stickers_b_gives);
       }
 
-      // 3. Adicionar figurinhas recebidas à coleção de cada usuário
       if (trade.stickers_b_gives?.length > 0) {
         const rowsForA = trade.stickers_b_gives.map(id => ({
-          user_id: trade.user_a,
-          sticker_id: id,
-          quantity: 1,
+          user_id: trade.user_a, sticker_id: id, quantity: 1,
         }));
         await supabase.from('user_collection').upsert(rowsForA, { onConflict: 'user_id,sticker_id' });
       }
       if (trade.stickers_a_gives?.length > 0) {
         const rowsForB = trade.stickers_a_gives.map(id => ({
-          user_id: trade.user_b,
-          sticker_id: id,
-          quantity: 1,
+          user_id: trade.user_b, sticker_id: id, quantity: 1,
         }));
         await supabase.from('user_collection').upsert(rowsForB, { onConflict: 'user_id,sticker_id' });
       }
