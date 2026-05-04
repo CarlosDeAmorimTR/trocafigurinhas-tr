@@ -15,15 +15,6 @@ const STATUS_CONFIG = {
   cancelled: { label: 'Cancelada',  color: '#DC2626', bg: '#FEE2E2', icon: '❌' },
 };
 
-// ── Regra de troca justa ──────────────────────────────────────
-// Peso: figurinha especial (is_metallic ou grupo INTRO/CC) = 2, normal = 1
-// Troca é justa se o peso total de cada lado for igual.
-// Exemplos válidos:
-//   1 especial (2) ↔ 1 especial (2)
-//   1 especial (2) ↔ 2 normais  (1+1)
-//   2 especiais(4) ↔ 4 normais  (4)
-//   3 normais  (3) ↔ 3 normais  (3)
-
 function getStickerWeight(sticker) {
   if (!sticker) return 1;
   if (sticker.is_metallic) return 2;
@@ -44,7 +35,6 @@ function isFairTrade(iGive, iReceive, stickersMap) {
   const weightReceive = calcTotalWeight(iReceive, stickersMap);
   return weightGive === weightReceive;
 }
-// ─────────────────────────────────────────────────────────────
 
 function MatchCard({ match, currentUserId, stickers, onPropose }) {
   const [expanded, setExpanded]   = useState(false);
@@ -52,7 +42,6 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
   const [proposing, setProposing] = useState(false);
   const [proposed, setProposed]   = useState(false);
 
-  // Mapa id → sticker para lookup rápido
   const stickersMap = Object.fromEntries(stickers.map(s => [String(s.id), s]));
 
   const getStickerLabel = (id) => {
@@ -142,7 +131,7 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '16px' }}>
             <div style={{ background: '#F0FDF4', borderRadius: '12px', padding: '14px', border: '1px solid #BBF7D0' }}>
               <p style={{ fontWeight: '700', color: C.success, fontSize: '13px', marginBottom: '10px' }}>
-                ✅ Você dá ({match.i_give_count}) · Peso: {weightGive}
+                ✅ Você oferece ({match.i_give_count}) · Peso: {weightGive}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '140px', overflowY: 'auto' }}>
                 {(match.i_give || []).map(id => (
@@ -187,7 +176,7 @@ function MatchCard({ match, currentUserId, stickers, onPropose }) {
               <p style={{ fontSize: '12px', color: fair ? '#065F46' : '#92400E', marginTop: '2px' }}>
                 {fair
                   ? `Peso igual dos dois lados (${weightGive} = ${weightReceive})`
-                  : `Você dá peso ${weightGive}, recebe peso ${weightReceive}. Regra: ⭐especial = 2 normais.`
+                  : `Você oferece peso ${weightGive}, recebe peso ${weightReceive}. Regra: ⭐especial = 2 normais.`
                 }
               </p>
             </div>
@@ -319,7 +308,7 @@ function TradeCard({ trade, currentUserId, stickers, onRefresh }) {
 
       <div style={{ marginBottom: '12px' }}>
         <p style={{ fontSize: '13px', color: C.success, fontWeight: '600', marginBottom: '4px' }}>
-          ✅ Você dá: {myGives?.map(id => getStickerLabel(id)).join(', ') || '—'}
+          ✅ Você oferece: {myGives?.map(id => getStickerLabel(id)).join(', ') || '—'}
         </p>
         <p style={{ fontSize: '13px', color: C.orange, fontWeight: '600' }}>
           📥 Você recebe: {iReceive?.map(id => getStickerLabel(id)).join(', ') || '—'}
