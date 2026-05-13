@@ -135,15 +135,13 @@ function Toast({ message, type = "success", onClose }) {
 
 function StickerCard({ sticker, isMarked, onToggle }) {
   const cd = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
-
   return (
     <button className="sticker-card" onClick={() => onToggle(sticker)} style={{
-      background: sticker.is_metallic && !isMarked
-        ? "linear-gradient(135deg,#f5f0e8,#e8d5a3,#f5f0e8)" : (isMarked ? C.green : C.white),
-      border: `2px solid ${isMarked ? "transparent" : (sticker.is_metallic ? "#C9A84C" : "#E5E7EB")}`,
+      background: isMarked ? C.green : C.white,
+      border: `2px solid ${isMarked ? "transparent" : "#E5E7EB"}`,
       borderRadius: "12px", padding: "12px 8px",
       display: "flex", flexDirection: "column", alignItems: "center", gap: "6px",
-      minHeight: "110px", width: "100%",
+      minHeight: "100px", width: "100%",
       position: "relative", overflow: "hidden",
     }}>
       <div style={{
@@ -154,15 +152,9 @@ function StickerCard({ sticker, isMarked, onToggle }) {
       <span style={{ fontSize: "10px", fontWeight: "700", color: isMarked ? "rgba(255,255,255,0.7)" : C.gray }}>
         #{sticker.number}
       </span>
-      <span style={{ fontSize: "28px", lineHeight: 1 }}>
+      <span style={{ fontSize: "26px", lineHeight: 1 }}>
         {sticker.group_code === "INTRO" ? "🏆" : sticker.group_code === "CC" ? "🥤" : cd.flag}
       </span>
-      <span style={{ fontSize: "10px", fontWeight: "600", color: isMarked ? "rgba(255,255,255,0.85)" : C.gray, textAlign: "center", lineHeight: 1.2 }}>
-        {CATEGORY_LABELS[sticker.category]?.replace(/^[^\s]+\s/, "") || sticker.category}
-      </span>
-      {sticker.is_metallic && (
-        <span style={{ position: "absolute", top: "8px", right: "6px", fontSize: "12px" }}>⭐</span>
-      )}
       {isMarked && (
         <div style={{
           position: "absolute", bottom: "6px", right: "6px",
@@ -211,7 +203,7 @@ function CountrySection({ country, stickers, markedSet, onToggle }) {
       </div>
       <div style={{
         background: C.white, borderRadius: "0 0 14px 14px", padding: "16px",
-        display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: "10px",
+        display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: "8px",
         border: `1px solid ${C.beigeDeep}`, borderTop: "none",
       }}>
         {stickers.map(s => (
@@ -223,7 +215,6 @@ function CountrySection({ country, stickers, markedSet, onToggle }) {
   );
 }
 
-// ── LoginScreen ───────────────────────────────────────────────
 function LoginScreen() {
   const [isNew, setIsNew]       = useState(false);
   const [email, setEmail]       = useState("");
@@ -237,11 +228,8 @@ function LoginScreen() {
   useEffect(() => {
     if (!success) return;
     const t = setTimeout(() => {
-      setSuccess(false);
-      setIsNew(false);
-      setEmail("");
-      setPassword("");
-      setName("");
+      setSuccess(false); setIsNew(false);
+      setEmail(""); setPassword(""); setName("");
       setAnimDir("slide-right");
     }, 2500);
     return () => clearTimeout(t);
@@ -249,8 +237,7 @@ function LoginScreen() {
 
   const switchMode = (toNew) => {
     setAnimDir(toNew ? "slide-left" : "slide-right");
-    setError(""); setSuccess(false);
-    setIsNew(toNew);
+    setError(""); setSuccess(false); setIsNew(toNew);
   };
 
   const handleSubmit = async (e) => {
@@ -262,8 +249,7 @@ function LoginScreen() {
         if (err) throw err;
         if (data?.user) {
           await supabase.from("users").upsert({
-            id: data.user.id,
-            full_name: name,
+            id: data.user.id, full_name: name,
             updated_at: new Date().toISOString(),
           });
         }
@@ -287,29 +273,22 @@ function LoginScreen() {
       minHeight: "100vh", display: "flex",
       background: `linear-gradient(135deg, ${C.green} 0%, #0F2A1F 60%, #1A3A2A 100%)`,
     }}>
-      {/* Painel esquerdo */}
       <div style={{
         flex: 1, display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         padding: "48px", gap: "32px",
       }} className="fade-in">
         <div style={{ textAlign: "center" }}>
-          <div style={{
-            fontSize: "80px", marginBottom: "16px",
-            animation: "floatBall 4s ease-in-out infinite", display: "inline-block",
-          }}>⚽</div>
-          <h1 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "36px", color: C.white, fontWeight: "700", marginBottom: "8px",
-          }}>TrocaFigurinhas</h1>
-          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "16px" }}>
-            Praça Virtual · Copa do Mundo 2026
-          </p>
+          <div style={{ fontSize: "80px", marginBottom: "16px", animation: "floatBall 4s ease-in-out infinite", display: "inline-block" }}>⚽</div>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "36px", color: C.white, fontWeight: "700", marginBottom: "8px" }}>
+            TrocaFigurinhas
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "16px" }}>Praça Virtual · Copa do Mundo 2026</p>
         </div>
         <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
           {[
             { icon: "🔄", label: "Trocas inteligentes" },
-            { icon: "🏆", label: "994 figurinhas"      },
+            { icon: "🏆", label: "980 figurinhas"      },
             { icon: "👥", label: "Colegas PV"          },
           ].map(({ icon, label }) => (
             <div key={label} style={{
@@ -328,60 +307,37 @@ function LoginScreen() {
         </div>
       </div>
 
-      {/* Painel direito */}
       <div style={{
         width: "440px", flexShrink: 0, background: C.white,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         padding: "48px 40px", boxShadow: "-8px 0 40px rgba(0,0,0,0.2)",
       }}>
-
         {success ? (
           <div className="fade-in" style={{ textAlign: "center", width: "100%" }}>
-            <div style={{
-              fontSize: "72px", marginBottom: "20px",
-              animation: "floatBall 2s ease-in-out infinite", display: "inline-block",
-            }}>🎉</div>
-            <h2 style={{ fontSize: "26px", fontWeight: "800", color: C.green, marginBottom: "10px" }}>
-              Conta criada!
-            </h2>
+            <div style={{ fontSize: "72px", marginBottom: "20px", animation: "floatBall 2s ease-in-out infinite", display: "inline-block" }}>🎉</div>
+            <h2 style={{ fontSize: "26px", fontWeight: "800", color: C.green, marginBottom: "10px" }}>Conta criada!</h2>
             <p style={{ color: C.gray, fontSize: "15px", marginBottom: "24px", lineHeight: 1.6 }}>
-              Seu cadastro foi realizado com sucesso.<br />
-              Redirecionando para o login...
+              Seu cadastro foi realizado com sucesso.<br />Redirecionando para o login...
             </p>
-            <div style={{
-              background: "#D1FAE5", border: "1px solid #6EE7B7",
-              borderRadius: "12px", padding: "14px 18px",
-              color: "#065F46", fontSize: "14px", fontWeight: "600",
-            }}>
+            <div style={{ background: "#D1FAE5", border: "1px solid #6EE7B7", borderRadius: "12px", padding: "14px 18px", color: "#065F46", fontSize: "14px", fontWeight: "600" }}>
               ✅ Usuário criado com sucesso!
             </div>
           </div>
         ) : (
           <>
-            <div style={{
-              display: "flex", background: C.grayLight,
-              borderRadius: "12px", padding: "4px", gap: "4px",
-              width: "100%", marginBottom: "32px",
-            }}>
-              {[
-                { label: "🔐 Entrar",      val: false },
-                { label: "🚀 Criar conta", val: true  },
-              ].map(opt => (
+            <div style={{ display: "flex", background: C.grayLight, borderRadius: "12px", padding: "4px", gap: "4px", width: "100%", marginBottom: "32px" }}>
+              {[{ label: "🔐 Entrar", val: false }, { label: "🚀 Criar conta", val: true }].map(opt => (
                 <button key={String(opt.val)} onClick={() => switchMode(opt.val)} style={{
                   flex: 1, padding: "12px", borderRadius: "10px", border: "none",
-                  background: isNew === opt.val
-                    ? (opt.val ? C.orange : C.green) : "transparent",
+                  background: isNew === opt.val ? (opt.val ? C.orange : C.green) : "transparent",
                   color: isNew === opt.val ? C.white : C.gray,
-                  fontWeight: isNew === opt.val ? "700" : "500",
-                  fontSize: "14px", transition: "all 0.25s ease",
+                  fontWeight: isNew === opt.val ? "700" : "500", fontSize: "14px",
+                  transition: "all 0.25s ease",
                   boxShadow: isNew === opt.val ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
-                }}>
-                  {opt.label}
-                </button>
+                }}>{opt.label}</button>
               ))}
             </div>
-
             <div key={String(isNew)} className={animDir} style={{ width: "100%" }}>
               <h2 style={{ fontSize: "24px", fontWeight: "800", color: C.black, marginBottom: "6px" }}>
                 {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
@@ -389,56 +345,35 @@ function LoginScreen() {
               <p style={{ color: C.gray, fontSize: "14px", marginBottom: "28px" }}>
                 {isNew ? "Junte-se aos colegas da Praça Virtual" : "Entre para gerenciar suas figurinhas"}
               </p>
-
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {isNew && (
                   <div>
-                    <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                      Seu nome
-                    </label>
-                    <input type="text" value={name} onChange={e => setName(e.target.value)}
-                      placeholder="Carlos Silva" required={isNew} style={inputStyle}
-                      onFocus={e => e.target.style.borderColor = C.green}
-                      onBlur={e => e.target.style.borderColor = C.beigeDeep}
-                    />
+                    <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>Seu nome</label>
+                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Carlos Silva" required={isNew} style={inputStyle}
+                      onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                   </div>
                 )}
                 <div>
-                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                    E-mail Praça Virtual
-                  </label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
-                    placeholder="seu@pracavirtual.com.br" required style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = C.green}
-                    onBlur={e => e.target.style.borderColor = C.beigeDeep}
-                  />
+                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>E-mail Praça Virtual</label>
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu@pracavirtual.com.br" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                 </div>
                 <div>
-                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>
-                    Senha
-                  </label>
-                  <input type="password" value={password} onChange={e => setPassword(e.target.value)}
-                    placeholder="••••••••" required style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = C.green}
-                    onBlur={e => e.target.style.borderColor = C.beigeDeep}
-                  />
+                  <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>Senha</label>
+                  <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                 </div>
-
                 {error && (
                   <div style={{ background: "#FEF2F2", border: "1px solid #FCA5A5", borderRadius: "10px", padding: "12px 16px", color: "#DC2626", fontSize: "14px" }}>
                     ⚠️ {error}
                   </div>
                 )}
-
                 <button type="submit" disabled={loading} style={{
                   padding: "16px", marginTop: "4px",
-                  background: loading ? C.gray : (isNew
-                    ? `linear-gradient(135deg,${C.orange},#E05A2A)`
-                    : `linear-gradient(135deg,${C.green},${C.greenLight})`),
+                  background: loading ? C.gray : (isNew ? `linear-gradient(135deg,${C.orange},#E05A2A)` : `linear-gradient(135deg,${C.green},${C.greenLight})`),
                   color: C.white, border: "none", borderRadius: "12px",
                   fontSize: "16px", fontWeight: "700",
                   boxShadow: loading ? "none" : "0 4px 16px rgba(0,0,0,0.2)",
-                  transition: "all 0.2s ease",
                 }}>
                   {loading ? "⏳ Aguarde..." : (isNew ? "🚀 Criar Conta" : "🔐 Entrar")}
                 </button>
@@ -451,7 +386,6 @@ function LoginScreen() {
   );
 }
 
-// ── App Principal ─────────────────────────────────────────────
 export default function App() {
   const [session, setSession]         = useState(null);
   const [loading, setLoading]         = useState(true);
@@ -493,14 +427,9 @@ export default function App() {
   const loadCollection = useCallback(async () => {
     if (!session || stickers.length === 0) return;
     const uid = session.user.id;
-    const { data: h } = await supabase
-      .from("user_has")
-      .select("sticker_id")
-      .eq("user_id", uid);
-
+    const { data: h } = await supabase.from("user_has").select("sticker_id").eq("user_id", uid);
     const newHasSet = new Set(h?.map(r => String(r.sticker_id)) || []);
     setHasSet(newHasSet);
-
     const allIds = stickers.map(s => String(s.id));
     setNeedsSet(new Set(allIds.filter(id => !newHasSet.has(id) && !pastedSet.has(id))));
   }, [session, stickers, pastedSet]);
@@ -531,10 +460,9 @@ export default function App() {
 
   const toggleSticker = useCallback(async (sticker) => {
     if (!session) return;
-    const uid    = session.user.id;
-    const sid    = String(sticker.id);
+    const uid = session.user.id;
+    const sid = String(sticker.id);
     const newHas = new Set(hasSet);
-
     if (newHas.has(sid)) {
       newHas.delete(sid);
       await supabase.from("user_has").delete().match({ user_id: uid, sticker_id: sticker.id });
@@ -542,7 +470,6 @@ export default function App() {
       newHas.add(sid);
       await supabase.from("user_has").upsert({ user_id: uid, sticker_id: sticker.id });
     }
-
     setHasSet(newHas);
     const allIds = stickers.map(s => String(s.id));
     setNeedsSet(new Set(allIds.filter(id => !newHas.has(id) && !pastedSet.has(id))));
@@ -550,13 +477,12 @@ export default function App() {
 
   const togglePasted = useCallback((sticker) => {
     if (!session) return;
-    const sid       = String(sticker.id);
+    const sid = String(sticker.id);
     const newPasted = new Set(pastedSet);
     if (newPasted.has(sid)) newPasted.delete(sid);
     else newPasted.add(sid);
     setPastedSet(newPasted);
     localStorage.setItem(`pasted-${session.user.id}`, JSON.stringify([...newPasted]));
-
     const allIds = stickers.map(s => String(s.id));
     setNeedsSet(new Set(allIds.filter(id => !hasSet.has(id) && !newPasted.has(id))));
   }, [session, pastedSet, stickers, hasSet]);
@@ -566,9 +492,16 @@ export default function App() {
       groupScrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
-  const groups        = [...new Set(stickers.map(s => s.group_code))];
+  // ── Lógica de grupos corrigida para INTRO / SELECOES / CC ──
+  const groups = ["INTRO", "SELECOES", "CC"];
+
   const groupStickers = stickers.filter(s => s.group_code === activeGroup);
-  const countries     = [...new Set(groupStickers.map(s => s.country || "Introdução"))];
+
+  // Para SELECOES, agrupa por país na ordem do álbum
+  const selectionCountries = activeGroup === "SELECOES"
+    ? [...new Set(stickers.filter(s => s.group_code === "SELECOES").map(s => s.country))]
+    : [];
+
   const filteredBySearch = searchTerm
     ? stickers.filter(s =>
         (s.label   || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -587,10 +520,7 @@ export default function App() {
   if (loading) return (
     <>
       <GlobalStyles />
-      <div style={{
-        minHeight: "100vh", display: "flex",
-        alignItems: "center", justifyContent: "center", background: C.green,
-      }}>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: C.green }}>
         <div style={{ textAlign: "center", color: C.white }}>
           <div style={{ fontSize: "56px", marginBottom: "16px", animation: "floatBall 2s ease-in-out infinite", display: "inline-block" }}>⚽</div>
           <p style={{ fontSize: "18px", opacity: 0.8 }}>Carregando...</p>
@@ -621,10 +551,9 @@ export default function App() {
               <div style={{ borderLeft: "1px solid rgba(255,255,255,0.25)", paddingLeft: "12px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                   <AlternatingIcon size={16} />
-                  <span style={{
-                    color: C.white, fontFamily: "'Playfair Display', serif",
-                    fontSize: "16px", fontWeight: "700", whiteSpace: "nowrap",
-                  }}>TrocaFigurinhas</span>
+                  <span style={{ color: C.white, fontFamily: "'Playfair Display', serif", fontSize: "16px", fontWeight: "700", whiteSpace: "nowrap" }}>
+                    TrocaFigurinhas
+                  </span>
                 </div>
                 <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "10px", marginTop: "1px", whiteSpace: "nowrap" }}>
                   Praça Virtual · Copa 2026
@@ -634,7 +563,7 @@ export default function App() {
             <button onClick={() => supabase.auth.signOut()} style={{
               background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "10px", padding: "8px 18px", color: C.white,
-              fontSize: "13px", fontWeight: "600", flexShrink: 0, transition: "background 0.2s",
+              fontSize: "13px", fontWeight: "600", flexShrink: 0,
             }}
               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.2)"}
               onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"}
@@ -643,10 +572,7 @@ export default function App() {
         </header>
 
         {/* NAV TABS */}
-        <nav style={{
-          background: C.white, boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-          position: "sticky", top: "64px", zIndex: 99,
-        }}>
+        <nav style={{ background: C.white, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", position: "sticky", top: "64px", zIndex: 99 }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex" }}>
             {TABS.map(tab => (
               <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -668,8 +594,10 @@ export default function App() {
         {/* CONTEÚDO */}
         <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "28px 24px" }}>
 
+          {/* ── ABA COLEÇÃO ── */}
           {activeTab === "colecao" && (
             <div className="fade-in">
+              {/* Stats */}
               <div style={{
                 background: `linear-gradient(135deg,${C.green},#0F2A1F)`,
                 borderRadius: "16px", padding: "20px 28px", marginBottom: "24px",
@@ -689,11 +617,11 @@ export default function App() {
                 ))}
               </div>
 
+              {/* Instrução */}
               <div style={{
                 background: C.white, borderRadius: "14px", padding: "16px 20px",
                 marginBottom: "24px", border: `2px solid ${C.green}`,
                 display: "flex", alignItems: "center", gap: "14px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
               }}>
                 <span style={{ fontSize: "28px" }}>✅</span>
                 <div>
@@ -702,7 +630,6 @@ export default function App() {
                   </p>
                   <p style={{ fontSize: "13px", color: C.gray, marginTop: "2px" }}>
                     Figurinhas já coladas no álbum podem ser gerenciadas na aba <strong>Meu Álbum</strong>.
-                    Somente as que não estão coladas e não marcadas aqui serão consideradas como <strong>faltam</strong>.
                   </p>
                 </div>
                 <div style={{ marginLeft: "auto", textAlign: "center", flexShrink: 0 }}>
@@ -711,29 +638,30 @@ export default function App() {
                 </div>
               </div>
 
+              {/* Busca */}
               <div style={{ marginBottom: "20px" }}>
                 <input
                   type="text"
-                  placeholder="🔍 Buscar figurinha, país ou número..."
+                  placeholder="🔍 Buscar por número (ex: BRA5, SC01, FWC3)..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   style={{
                     width: "100%", padding: "14px 18px", borderRadius: "12px",
                     border: `2px solid ${C.beigeDeep}`, fontSize: "15px",
                     background: C.white, outline: "none",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)", transition: "border-color 0.2s, box-shadow 0.2s",
                   }}
-                  onFocus={e => { e.target.style.borderColor = C.green; e.target.style.boxShadow = "0 0 0 3px rgba(26,66,51,0.1)"; }}
-                  onBlur={e => { e.target.style.borderColor = C.beigeDeep; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)"; }}
+                  onFocus={e => e.target.style.borderColor = C.green}
+                  onBlur={e => e.target.style.borderColor = C.beigeDeep}
                 />
               </div>
 
+              {/* Resultados da busca */}
               {searchTerm && filteredBySearch && (
                 <div className="fade-in">
                   <p style={{ color: C.gray, marginBottom: "16px", fontSize: "14px" }}>
                     {filteredBySearch.length} resultado(s) para "{searchTerm}"
                   </p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: "10px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: "8px" }}>
                     {filteredBySearch.map(s => (
                       <StickerCard key={s.id} sticker={s}
                         isMarked={hasSet.has(String(s.id))} onToggle={toggleSticker} />
@@ -742,6 +670,7 @@ export default function App() {
                 </div>
               )}
 
+              {/* Navegação de grupos */}
               {!searchTerm && (
                 <>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
@@ -754,6 +683,7 @@ export default function App() {
                       onMouseEnter={e => e.currentTarget.style.background = C.beigeDeep}
                       onMouseLeave={e => e.currentTarget.style.background = C.white}
                     >◀</button>
+
                     <div ref={groupScrollRef} style={{
                       flex: 1, display: "flex", gap: "6px",
                       overflowX: "auto", scrollbarWidth: "none", scrollBehavior: "smooth",
@@ -771,6 +701,7 @@ export default function App() {
                         </button>
                       ))}
                     </div>
+
                     <button onClick={() => scrollGroups(1)} style={{
                       width: "36px", height: "36px", borderRadius: "10px",
                       border: `2px solid ${C.beigeDeep}`, background: C.white,
@@ -782,17 +713,33 @@ export default function App() {
                     >▶</button>
                   </div>
 
-                  {["INTRO", "CC"].includes(activeGroup) ? (
+                  {/* Conteúdo do grupo ativo */}
+                  {activeGroup === "INTRO" && (
                     <CountrySection
-                      country={activeGroup === "INTRO" ? "Introdução" : "Especial"}
+                      country="Introdução"
                       stickers={groupStickers}
-                      markedSet={hasSet} onToggle={toggleSticker}
+                      markedSet={hasSet}
+                      onToggle={toggleSticker}
                     />
-                  ) : (
-                    countries.map(country => (
-                      <CountrySection key={country} country={country}
-                        stickers={groupStickers.filter(s => (s.country || "Introdução") === country)}
-                        markedSet={hasSet} onToggle={toggleSticker}
+                  )}
+
+                  {activeGroup === "CC" && (
+                    <CountrySection
+                      country="Especial"
+                      stickers={groupStickers}
+                      markedSet={hasSet}
+                      onToggle={toggleSticker}
+                    />
+                  )}
+
+                  {activeGroup === "SELECOES" && (
+                    selectionCountries.map(country => (
+                      <CountrySection
+                        key={country}
+                        country={country}
+                        stickers={stickers.filter(s => s.group_code === "SELECOES" && s.country === country)}
+                        markedSet={hasSet}
+                        onToggle={toggleSticker}
                       />
                     ))
                   )}
@@ -801,6 +748,7 @@ export default function App() {
             </div>
           )}
 
+          {/* ── ABA DASHBOARD ── */}
           {activeTab === "dashboard" && (
             <div className="fade-in">
               <Dashboard
@@ -813,12 +761,14 @@ export default function App() {
             </div>
           )}
 
+          {/* ── ABA TROCAS ── */}
           {activeTab === "trocas" && (
             <div className="fade-in">
               <MatchesPage session={session} stickers={stickers} />
             </div>
           )}
 
+          {/* ── ABA PERFIL ── */}
           {activeTab === "perfil" && (
             <div className="fade-in">
               <ProfilePage
