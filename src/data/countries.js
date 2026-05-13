@@ -1,81 +1,89 @@
-// src/data/countries.js
-
 export const COUNTRY_FLAGS = {
-  // ── Introdução / Especial ─────────────────────────────────
-  'Introdução':                { flag: '🏆', color: '#C9A84C' },
-  'Especial':                  { flag: '🥤', color: '#F40009' },
+  'Introdução':             { flag: '🏆', color: '#C9A84C' },
+  'Especial':               { flag: '🥤', color: '#F40009' },
+  'México':                 { flag: '🇲🇽', color: '#006847' },
+  'África do Sul':          { flag: '🇿🇦', color: '#007A4D' },
+  'Coreia do Sul':          { flag: '🇰🇷', color: '#003478' },
+  'Tchéquia':               { flag: '🇨🇿', color: '#D7141A' },
+  'Canadá':                 { flag: '🇨🇦', color: '#FF0000' },
+  'Bósnia e Herzegovina':   { flag: '🇧🇦', color: '#002395' },
+  'Catar':                  { flag: '🇶🇦', color: '#8D1B3D' },
+  'Suíça':                  { flag: '🇨🇭', color: '#FF0000' },
+  'Brasil':                 { flag: '🇧🇷', color: '#009C3B' },
+  'Marrocos':               { flag: '🇲🇦', color: '#C1272D' },
+  'Haiti':                  { flag: '🇭🇹', color: '#00209F' },
+  'Escócia':                { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', color: '#003F87' },
+  'Estados Unidos':         { flag: '🇺🇸', color: '#3C3B6E' },
+  'Paraguai':               { flag: '🇵🇾', color: '#D52B1E' },
+  'Austrália':              { flag: '🇦🇺', color: '#00008B' },
+  'Turquia':                { flag: '🇹🇷', color: '#E30A17' },
+  'Alemanha':               { flag: '🇩🇪', color: '#000000' },
+  'Curaçao':                { flag: '🇨🇼', color: '#003DA5' },
+  'Costa do Marfim':        { flag: '🇨🇮', color: '#F77F00' },
+  'Equador':                { flag: '🇪🇨', color: '#FFD100' },
+  'Países Baixos':          { flag: '🇳🇱', color: '#AE1C28' },
+  'Japão':                  { flag: '🇯🇵', color: '#BC002D' },
+  'Suécia':                 { flag: '🇸🇪', color: '#006AA7' },
+  'Tunísia':                { flag: '🇹🇳', color: '#E70013' },
+  'Bélgica':                { flag: '🇧🇪', color: '#EF3340' },
+  'Egito':                  { flag: '🇪🇬', color: '#CE1126' },
+  'Irã':                    { flag: '🇮🇷', color: '#239F40' },
+  'Nova Zelândia':          { flag: '🇳🇿', color: '#00247D' },
+  'Espanha':                { flag: '🇪🇸', color: '#AA151B' },
+  'Cabo Verde':             { flag: '🇨🇻', color: '#003893' },
+  'Arábia Saudita':         { flag: '🇸🇦', color: '#006C35' },
+  'Uruguai':                { flag: '🇺🇾', color: '#5EB6E4' },
+  'França':                 { flag: '🇫🇷', color: '#002395' },
+  'Senegal':                { flag: '🇸🇳', color: '#00853F' },
+  'Iraque':                 { flag: '🇮🇶', color: '#007A3D' },
+  'Noruega':                { flag: '🇳🇴', color: '#EF2B2D' },
+  'Argentina':              { flag: '🇦🇷', color: '#74ACDF' },
+  'Argélia':                { flag: '🇩🇿', color: '#006233' },
+  'Áustria':                { flag: '🇦🇹', color: '#ED2939' },
+  'Jordânia':               { flag: '🇯🇴', color: '#007A3D' },
+  'Portugal':               { flag: '🇵🇹', color: '#006600' },
+  'Rep. Dem. do Congo':     { flag: '🇨🇩', color: '#007FFF' },
+  'Uzbequistão':            { flag: '🇺🇿', color: '#1EB53A' },
+  'Colômbia':               { flag: '🇨🇴', color: '#FCD116' },
+  'Inglaterra':             { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', color: '#CF142B' },
+  'Croácia':                { flag: '🇭🇷', color: '#FF0000' },
+  'Gana':                   { flag: '🇬🇭', color: '#006B3F' },
+  'Panamá':                 { flag: '🇵🇦', color: '#005293' },
+};
 
-  // ── Grupo A ───────────────────────────────────────────────
-  'México':                    { flag: '🇲🇽', color: '#006847' },
-  'África do Sul':             { flag: '🇿🇦', color: '#007A4D' },
-  'Coreia do Sul':             { flag: '🇰🇷', color: '#003478' },
-  'Tchéquia':                  { flag: '🇨🇿', color: '#D7141A' },
+// ✅ Mapa de código do banco → emoji direto (resolve o problema do "MX" no card)
+export const CODE_TO_FLAG = {
+  'FWC': '🏆',
+  'CC':  '🥤',
+  'MEX': '🇲🇽', 'RSA': '🇿🇦', 'KOR': '🇰🇷', 'CZE': '🇨🇿',
+  'CAN': '🇨🇦', 'BIH': '🇧🇦', 'QAT': '🇶🇦', 'SUI': '🇨🇭',
+  'BRA': '🇧🇷', 'MAR': '🇲🇦', 'HAI': '🇭🇹', 'SCO': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+  'USA': '🇺🇸', 'PAR': '🇵🇾', 'AUS': '🇦🇺', 'TUR': '🇹🇷',
+  'GER': '🇩🇪', 'CUW': '🇨🇼', 'CIV': '🇨🇮', 'ECU': '🇪🇨',
+  'NED': '🇳🇱', 'JPN': '🇯🇵', 'SWE': '🇸🇪', 'TUN': '🇹🇳',
+  'BEL': '🇧🇪', 'EGY': '🇪🇬', 'IRN': '🇮🇷', 'NZL': '🇳🇿',
+  'ESP': '🇪🇸', 'CPV': '🇨🇻', 'KSA': '🇸🇦', 'URU': '🇺🇾',
+  'FRA': '🇫🇷', 'SEN': '🇸🇳', 'IRQ': '🇮🇶', 'NOR': '🇳🇴',
+  'ARG': '🇦🇷', 'ALG': '🇩🇿', 'AUT': '🇦🇹', 'JOR': '🇯🇴',
+  'POR': '🇵🇹', 'COD': '🇨🇩', 'UZB': '🇺🇿', 'COL': '🇨🇴',
+  'ENG': '🏴󠁧󠁢󠁥󠁮󠁧󠁿', 'CRO': '🇭🇷', 'GHA': '🇬🇭', 'PAN': '🇵🇦',
+};
 
-  // ── Grupo B ───────────────────────────────────────────────
-  'Canadá':                    { flag: '🇨🇦', color: '#FF0000' },
-  'Bósnia e Herzegovina':      { flag: '🇧🇦', color: '#002395' },
-  'Catar':                     { flag: '🇶🇦', color: '#8D1B3D' },
-  'Suíça':                     { flag: '🇨🇭', color: '#FF0000' },
-
-  // ── Grupo C ───────────────────────────────────────────────
-  'Brasil':                    { flag: '🇧🇷', color: '#009C3B' },
-  'Marrocos':                  { flag: '🇲🇦', color: '#C1272D' },
-  'Haiti':                     { flag: '🇭🇹', color: '#00209F' },
-  'Escócia':                   { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', color: '#003F87' },
-
-  // ── Grupo D ───────────────────────────────────────────────
-  'Estados Unidos':             { flag: '🇺🇸', color: '#3C3B6E' },
-  'Paraguai':                  { flag: '🇵🇾', color: '#D52B1E' },
-  'Austrália':                 { flag: '🇦🇺', color: '#00008B' },
-  'Turquia':                   { flag: '🇹🇷', color: '#E30A17' },
-
-  // ── Grupo E ───────────────────────────────────────────────
-  'Alemanha':                  { flag: '🇩🇪', color: '#000000' },
-  'Curaçao':                   { flag: '🇨🇼', color: '#003DA5' },
-  'Costa do Marfim':           { flag: '🇨🇮', color: '#F77F00' },
-  'Equador':                   { flag: '🇪🇨', color: '#FFD100' },
-
-  // ── Grupo F ───────────────────────────────────────────────
-  'Países Baixos':             { flag: '🇳🇱', color: '#AE1C28' },
-  'Japão':                     { flag: '🇯🇵', color: '#BC002D' },
-  'Suécia':                    { flag: '🇸🇪', color: '#006AA7' },
-  'Tunísia':                   { flag: '🇹🇳', color: '#E70013' },
-
-  // ── Grupo G ───────────────────────────────────────────────
-  'Bélgica':                   { flag: '🇧🇪', color: '#EF3340' },
-  'Egito':                     { flag: '🇪🇬', color: '#CE1126' },
-  'Irã':                       { flag: '🇮🇷', color: '#239F40' },
-  'Nova Zelândia':              { flag: '🇳🇿', color: '#00247D' },
-
-  // ── Grupo H ───────────────────────────────────────────────
-  'Espanha':                   { flag: '🇪🇸', color: '#AA151B' },
-  'Cabo Verde':                { flag: '🇨🇻', color: '#003893' },
-  'Arábia Saudita':            { flag: '🇸🇦', color: '#006C35' },
-  'Uruguai':                   { flag: '🇺🇾', color: '#5EB6E4' },
-
-  // ── Grupo I ───────────────────────────────────────────────
-  'França':                    { flag: '🇫🇷', color: '#002395' },
-  'Senegal':                   { flag: '🇸🇳', color: '#00853F' },
-  'Iraque':                    { flag: '🇮🇶', color: '#007A3D' },
-  'Noruega':                   { flag: '🇳🇴', color: '#EF2B2D' },
-
-  // ── Grupo J ───────────────────────────────────────────────
-  'Argentina':                 { flag: '🇦🇷', color: '#74ACDF' },
-  'Argélia':                   { flag: '🇩🇿', color: '#006233' },
-  'Áustria':                   { flag: '🇦🇹', color: '#ED2939' },
-  'Jordânia':                  { flag: '🇯🇴', color: '#007A3D' },
-
-  // ── Grupo K ───────────────────────────────────────────────
-  'Portugal':                  { flag: '🇵🇹', color: '#006600' },
-  'Rep. Dem. do Congo':        { flag: '🇨🇩', color: '#007FFF' },
-  'Uzbequistão':               { flag: '🇺🇿', color: '#1EB53A' },
-  'Colômbia':                  { flag: '🇨🇴', color: '#FCD116' },
-
-  // ── Grupo L ───────────────────────────────────────────────
-  'Inglaterra':                { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', color: '#CF142B' },
-  'Croácia':                   { flag: '🇭🇷', color: '#FF0000' },
-  'Gana':                      { flag: '🇬🇭', color: '#006B3F' },
-  'Panamá':                    { flag: '🇵🇦', color: '#005293' },
+// ✅ Mapa de código → cor principal
+export const CODE_TO_COLOR = {
+  'FWC': '#C9A84C', 'CC':  '#F40009',
+  'MEX': '#006847', 'RSA': '#007A4D', 'KOR': '#003478', 'CZE': '#D7141A',
+  'CAN': '#FF0000', 'BIH': '#002395', 'QAT': '#8D1B3D', 'SUI': '#FF0000',
+  'BRA': '#009C3B', 'MAR': '#C1272D', 'HAI': '#00209F', 'SCO': '#003F87',
+  'USA': '#3C3B6E', 'PAR': '#D52B1E', 'AUS': '#00008B', 'TUR': '#E30A17',
+  'GER': '#000000', 'CUW': '#003DA5', 'CIV': '#F77F00', 'ECU': '#FFD100',
+  'NED': '#AE1C28', 'JPN': '#BC002D', 'SWE': '#006AA7', 'TUN': '#E70013',
+  'BEL': '#EF3340', 'EGY': '#CE1126', 'IRN': '#239F40', 'NZL': '#00247D',
+  'ESP': '#AA151B', 'CPV': '#003893', 'KSA': '#006C35', 'URU': '#5EB6E4',
+  'FRA': '#002395', 'SEN': '#00853F', 'IRQ': '#007A3D', 'NOR': '#EF2B2D',
+  'ARG': '#74ACDF', 'ALG': '#006233', 'AUT': '#ED2939', 'JOR': '#007A3D',
+  'POR': '#006600', 'COD': '#007FFF', 'UZB': '#1EB53A', 'COL': '#FCD116',
+  'ENG': '#CF142B', 'CRO': '#FF0000', 'GHA': '#006B3F', 'PAN': '#005293',
 };
 
 export const GROUP_NAMES = {
@@ -88,33 +96,4 @@ export const CATEGORY_LABELS = {
   'intro':     '🏆 Introdução',
   'figurinha': '⚽ Figurinha',
   'especial':  '🥤 Especial',
-};
-
-export const COUNTRY_CODES = {
-  'Introdução':           'FWC',
-  'México':               'MEX', 'África do Sul':        'RSA',
-  'Coreia do Sul':        'KOR', 'Tchéquia':             'CZE',
-  'Canadá':               'CAN', 'Bósnia e Herzegovina': 'BIH',
-  'Catar':                'QAT', 'Suíça':                'SUI',
-  'Brasil':               'BRA', 'Marrocos':             'MAR',
-  'Haiti':                'HAI', 'Escócia':              'SC0',
-  'Estados Unidos':       'USA', 'Paraguai':             'PAR',
-  'Austrália':            'AUS', 'Turquia':              'TUR',
-  'Alemanha':             'GER', 'Curaçao':              'CUW',
-  'Costa do Marfim':      'CIV', 'Equador':              'ECU',
-  'Países Baixos':        'NED', 'Japão':                'JPN',
-  'Suécia':               'SWE', 'Tunísia':              'TUN',
-  'Bélgica':              'BEL', 'Egito':                'EGY',
-  'Irã':                  'IRN', 'Nova Zelândia':        'NZL',
-  'Espanha':              'ESP', 'Cabo Verde':           'CPV',
-  'Arábia Saudita':       'KSA', 'Uruguai':              'URU',
-  'França':               'FRA', 'Senegal':              'SEN',
-  'Iraque':               'IRQ', 'Noruega':              'NOR',
-  'Argentina':            'ARG', 'Argélia':              'ALG',
-  'Áustria':              'AUT', 'Jordânia':             'JOR',
-  'Portugal':             'POR', 'Rep. Dem. do Congo':   'COD',
-  'Uzbequistão':          'UZB', 'Colômbia':             'COL',
-  'Inglaterra':           'ENG', 'Croácia':              'CRO',
-  'Gana':                 'GHA', 'Panamá':               'PAN',
-  'Especial':             'CC',
 };

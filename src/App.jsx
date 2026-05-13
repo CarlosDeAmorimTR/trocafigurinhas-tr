@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "./lib/supabase";
-import { COUNTRY_FLAGS, GROUP_NAMES, CATEGORY_LABELS } from "./data/countries";
+import { COUNTRY_FLAGS, CODE_TO_FLAG, CODE_TO_COLOR, GROUP_NAMES, CATEGORY_LABELS } from "./data/countries";
 import ProfilePage from "./components/ProfilePage";
 import MatchesPage from "./components/MatchesPage";
 import Dashboard   from "./components/Dashboard";
@@ -133,14 +133,13 @@ function Toast({ message, type = "success", onClose }) {
   );
 }
 
+// ✅ Usa country_code do sticker para buscar emoji e cor diretamente
 function StickerCard({ sticker, isMarked, onToggle }) {
-  const cd = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
-
-  // ✅ CORRIGIDO: busca o emoji da bandeira direto do COUNTRY_FLAGS pelo nome do país
-  const flagEmoji =
-    sticker.group_code === "INTRO" ? "🏆"
-    : sticker.group_code === "CC"  ? "🥤"
-    : (COUNTRY_FLAGS[sticker.country]?.flag ?? "⚽");
+  const code  = sticker.country_code || sticker.number?.match(/^[A-Z]+/)?.[0] || "";
+  const flag  = sticker.group_code === "INTRO" ? "🏆"
+              : sticker.group_code === "CC"    ? "🥤"
+              : (CODE_TO_FLAG[code] ?? "⚽");
+  const color = CODE_TO_COLOR[code] ?? C.green;
 
   return (
     <button className="sticker-card" onClick={() => onToggle(sticker)} style={{
@@ -154,21 +153,18 @@ function StickerCard({ sticker, isMarked, onToggle }) {
     }}>
       <div style={{
         position: "absolute", top: 0, left: 0, right: 0, height: "4px",
-        background: isMarked ? "rgba(255,255,255,0.4)" : cd.color,
+        background: isMarked ? "rgba(255,255,255,0.4)" : color,
         borderRadius: "10px 10px 0 0",
       }} />
       <span style={{ fontSize: "10px", fontWeight: "700", color: isMarked ? "rgba(255,255,255,0.7)" : C.gray }}>
         #{sticker.number}
       </span>
 
-      {/* ✅ EMOJI DA BANDEIRA CORRETO */}
-      <span style={{ fontSize: "28px", lineHeight: 1 }}>
-        {flagEmoji}
-      </span>
+      {/* ✅ EMOJI DA BANDEIRA */}
+      <span style={{ fontSize: "28px", lineHeight: 1 }}>{flag}</span>
 
       <span style={{ fontSize: "10px", fontWeight: "600", color: isMarked ? "rgba(255,255,255,0.85)" : C.gray, textAlign: "center", lineHeight: 1.2 }}>
-        {CATEGORY_LABELS[sticker.category]?.replace(/^[^\s]+\s/, "") || sticker.category}
-      </span>
+        {CATEGORY_LABELS[sticker.category]?.replace(/^
       {sticker.is_metallic && (
         <span style={{ position: "absolute", top: "8px", right: "6px", fontSize: "12px" }}>⭐</span>
       )}
@@ -185,22 +181,27 @@ function StickerCard({ sticker, isMarked, onToggle }) {
   );
 }
 
+// ✅ Usa country_code do primeiro sticker da seção para bandeira e cor
 function CountrySection({ country, stickers, markedSet, onToggle }) {
-  // ✅ CORRIGIDO: busca direto do COUNTRY_FLAGS pelo nome exato do país
-  const flagData = COUNTRY_FLAGS[country] ?? { flag: "⚽", color: C.green };
-  const total    = stickers.length;
-  const marked   = stickers.filter(s => markedSet.has(String(s.id))).length;
-  const pct      = total > 0 ? Math.round((marked / total) * 100) : 0;
+  const firstCode = stickers[0]?.country_code
+    || stickers[0]?.number?.match(/^[A-Z]+/)?.[0]
+    || "";
+
+  const flag  = COUNTRY_FLAGS[country]?.flag  ?? CODE_TO_FLAG[firstCode]  ?? "⚽";
+  const color = COUNTRY_FLAGS[country]?.color ?? CODE_TO_COLOR[firstCode] ?? C.green;
+
+  const total  = stickers.length;
+  const marked = stickers.filter(s => markedSet.has(String(s.id))).length;
+  const pct    = total > 0 ? Math.round((marked / total) * 100) : 0;
 
   return (
     <div style={{ marginBottom: "32px" }} className="fade-in">
       <div style={{
         display: "flex", alignItems: "center", gap: "12px",
         padding: "14px 18px", background: C.green,
-        borderRadius: "14px 14px 0 0", borderLeft: `5px solid ${flagData.color}`,
+        borderRadius: "14px 14px 0 0", borderLeft: `5px solid ${color}`,
       }}>
-        {/* ✅ EMOJI DA BANDEIRA NO HEADER DA SEÇÃO */}
-        <span style={{ fontSize: "32px" }}>{flagData.flag}</span>
+        <span style={{ fontSize: "32px" }}>{flag}</span>
         <div style={{ flex: 1 }}>
           <h3 style={{ color: C.white, fontSize: "18px", fontWeight: "700", fontFamily: "'Playfair Display', serif" }}>
             {country}
@@ -216,7 +217,7 @@ function CountrySection({ country, stickers, markedSet, onToggle }) {
           width: `${pct}%`, height: "100%",
           background: pct === 100
             ? "linear-gradient(90deg,#16A34A,#4ADE80)"
-            : `linear-gradient(90deg,${flagData.color},${C.orange})`,
+            : `linear-gradient(90deg,${color},${C.orange})`,
           transition: "width 0.6s ease",
         }} />
       </div>
@@ -362,7 +363,7 @@ function LoginScreen() {
                 {isNew ? "Criar sua conta" : "Bem-vindo de volta!"}
               </h2>
               <p style={{ color: C.gray, fontSize: "14px", marginBottom: "28px" }}>
-                {isNew ? "Junte-se aos colegas da Praça Virtual" : "Entre para gerenciar suas figurinhas"}
+                {isNew ?inhas"}
               </p>
               <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 {isNew && (
@@ -414,16 +415,16 @@ function LoginScreen() {
 }
 
 export default function App() {
-  const [session, setSession]         = useState(null);
-  const [loading, setLoading]         = useState(true);
-  const [stickers, setStickers]       = useState([]);
-  const [hasSet, setHasSet]           = useState(new Set());
-  const [needsSet, setNeedsSet]       = useState(new Set());
-  const [pastedSet, setPastedSet]     = useState(new Set());
-  const [activeTab, setActiveTab]     = useState("colecao");
-  const [activeGroup, setActiveGroup] = useState("INTRO");
-  const [searchTerm, setSearchTerm]   = useState("");
-  const [toast, setToast]             = useState(null);
+  const [session, setSession]             = useState(null);
+  const [loading, setLoading]             = useState(true);
+  const [stickers, setStickers]           = useState([]);
+  const [hasSet, setHasSet]               = useState(new Set());
+  const [needsSet, setNeedsSet]           = useState(new Set());
+  const [pastedSet, setPastedSet]         = useState(new Set());
+  const [activeTab, setActiveTab]         = useState("colecao");
+  const [activeGroup, setActiveGroup]     = useState("INTRO");
+  const [searchTerm, setSearchTerm]       = useState("");
+  const [toast, setToast]                 = useState(null);
   const [pendingTrades, setPendingTrades] = useState(0);
   const groupScrollRef = useRef(null);
 
@@ -546,10 +547,10 @@ export default function App() {
     : null;
 
   const TABS = [
-    { id: "colecao",   label: "📚 Coleção"   },
-    { id: "dashboard", label: "📖 Meu Álbum"  },
+    { id: "colecao",   label: "📚 Coleção"  },
+    { id: "dashboard", label: "📖 Meu Álbum" },
     { id: "trocas",    label: "🔄 Trocas", badge: pendingTrades },
-    { id: "perfil",    label: "👤 Perfil"    },
+    { id: "perfil",    label: "👤 Perfil"   },
   ];
 
   if (loading) return (
@@ -571,7 +572,6 @@ export default function App() {
       <GlobalStyles />
       <div style={{ minHeight: "100vh", background: C.beige }}>
 
-        {/* HEADER */}
         <header style={{
           background: `linear-gradient(135deg, ${C.green} 0%, #0F2A1F 100%)`,
           position: "sticky", top: 0, zIndex: 100,
@@ -606,7 +606,6 @@ export default function App() {
           </div>
         </header>
 
-        {/* NAV TABS */}
         <nav style={{ background: C.white, boxShadow: "0 2px 8px rgba(0,0,0,0.06)", position: "sticky", top: "64px", zIndex: 99 }}>
           <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 24px", display: "flex" }}>
             {TABS.map(tab => (
@@ -626,13 +625,11 @@ export default function App() {
           </div>
         </nav>
 
-        {/* CONTEÚDO */}
         <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "28px 24px" }}>
 
           {activeTab === "colecao" && (
             <div className="fade-in">
 
-              {/* Stats */}
               <div style={{
                 background: `linear-gradient(135deg,${C.green},#0F2A1F)`,
                 borderRadius: "16px", padding: "20px 28px", marginBottom: "24px",
@@ -652,7 +649,6 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Instrução */}
               <div style={{
                 background: C.white, borderRadius: "14px", padding: "16px 20px",
                 marginBottom: "24px", border: `2px solid ${C.green}`,
@@ -674,7 +670,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Busca */}
               <div style={{ marginBottom: "20px" }}>
                 <input
                   type="text"
@@ -692,7 +687,6 @@ export default function App() {
                 />
               </div>
 
-              {/* Resultados da busca */}
               {searchTerm && filteredBySearch && (
                 <div className="fade-in">
                   <p style={{ color: C.gray, marginBottom: "16px", fontSize: "14px" }}>
@@ -709,7 +703,6 @@ export default function App() {
 
               {!searchTerm && (
                 <>
-                  {/* Botões de grupo */}
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
                     <button onClick={() => scrollGroups(-1)} style={{
                       width: "36px", height: "36px", borderRadius: "10px",
