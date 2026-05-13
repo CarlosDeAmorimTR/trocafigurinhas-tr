@@ -135,6 +135,13 @@ function Toast({ message, type = "success", onClose }) {
 
 function StickerCard({ sticker, isMarked, onToggle }) {
   const cd = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
+
+  // ✅ CORRIGIDO: busca o emoji da bandeira direto do COUNTRY_FLAGS pelo nome do país
+  const flagEmoji =
+    sticker.group_code === "INTRO" ? "🏆"
+    : sticker.group_code === "CC"  ? "🥤"
+    : (COUNTRY_FLAGS[sticker.country]?.flag ?? "⚽");
+
   return (
     <button className="sticker-card" onClick={() => onToggle(sticker)} style={{
       background: sticker.is_metallic && !isMarked
@@ -153,11 +160,12 @@ function StickerCard({ sticker, isMarked, onToggle }) {
       <span style={{ fontSize: "10px", fontWeight: "700", color: isMarked ? "rgba(255,255,255,0.7)" : C.gray }}>
         #{sticker.number}
       </span>
+
+      {/* ✅ EMOJI DA BANDEIRA CORRETO */}
       <span style={{ fontSize: "28px", lineHeight: 1 }}>
-        {sticker.group_code === "INTRO" ? "🏆"
-          : sticker.group_code === "CC" ? "🥤"
-          : cd.flag}
+        {flagEmoji}
       </span>
+
       <span style={{ fontSize: "10px", fontWeight: "600", color: isMarked ? "rgba(255,255,255,0.85)" : C.gray, textAlign: "center", lineHeight: 1.2 }}>
         {CATEGORY_LABELS[sticker.category]?.replace(/^[^\s]+\s/, "") || sticker.category}
       </span>
@@ -178,20 +186,21 @@ function StickerCard({ sticker, isMarked, onToggle }) {
 }
 
 function CountrySection({ country, stickers, markedSet, onToggle }) {
-  // ✅ CORREÇÃO: busca bandeira pelo nome exato do país
-  const cd     = COUNTRY_FLAGS[country] || { flag: "⚽", color: C.green };
-  const total  = stickers.length;
-  const marked = stickers.filter(s => markedSet.has(String(s.id))).length;
-  const pct    = total > 0 ? Math.round((marked / total) * 100) : 0;
+  // ✅ CORRIGIDO: busca direto do COUNTRY_FLAGS pelo nome exato do país
+  const flagData = COUNTRY_FLAGS[country] ?? { flag: "⚽", color: C.green };
+  const total    = stickers.length;
+  const marked   = stickers.filter(s => markedSet.has(String(s.id))).length;
+  const pct      = total > 0 ? Math.round((marked / total) * 100) : 0;
 
   return (
     <div style={{ marginBottom: "32px" }} className="fade-in">
       <div style={{
         display: "flex", alignItems: "center", gap: "12px",
         padding: "14px 18px", background: C.green,
-        borderRadius: "14px 14px 0 0", borderLeft: `5px solid ${cd.color}`,
+        borderRadius: "14px 14px 0 0", borderLeft: `5px solid ${flagData.color}`,
       }}>
-        <span style={{ fontSize: "32px" }}>{cd.flag}</span>
+        {/* ✅ EMOJI DA BANDEIRA NO HEADER DA SEÇÃO */}
+        <span style={{ fontSize: "32px" }}>{flagData.flag}</span>
         <div style={{ flex: 1 }}>
           <h3 style={{ color: C.white, fontSize: "18px", fontWeight: "700", fontFamily: "'Playfair Display', serif" }}>
             {country}
@@ -207,7 +216,7 @@ function CountrySection({ country, stickers, markedSet, onToggle }) {
           width: `${pct}%`, height: "100%",
           background: pct === 100
             ? "linear-gradient(90deg,#16A34A,#4ADE80)"
-            : `linear-gradient(90deg,${cd.color},${C.orange})`,
+            : `linear-gradient(90deg,${flagData.color},${C.orange})`,
           transition: "width 0.6s ease",
         }} />
       </div>
@@ -510,13 +519,10 @@ export default function App() {
       groupScrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
-  // ✅ GRUPOS FIXOS — INTRO, SELECOES, CC
   const GROUPS = ["INTRO", "SELECOES", "CC"];
 
-  // ✅ Stickers do grupo ativo
   const groupStickers = stickers.filter(s => s.group_code === activeGroup);
 
-  // ✅ Para SELECOES: lista de países na ordem exata do banco (sem duplicatas)
   const selectionCountries = (() => {
     const seen = new Set();
     const result = [];
@@ -623,7 +629,6 @@ export default function App() {
         {/* CONTEÚDO */}
         <main style={{ maxWidth: "1200px", margin: "0 auto", padding: "28px 24px" }}>
 
-          {/* ── ABA COLEÇÃO ── */}
           {activeTab === "colecao" && (
             <div className="fade-in">
 
@@ -702,7 +707,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* Navegação de grupos + conteúdo */}
               {!searchTerm && (
                 <>
                   {/* Botões de grupo */}
@@ -746,7 +750,6 @@ export default function App() {
                     >▶</button>
                   </div>
 
-                  {/* ✅ INTRO — seção única */}
                   {activeGroup === "INTRO" && (
                     <CountrySection
                       country="Introdução"
@@ -756,7 +759,6 @@ export default function App() {
                     />
                   )}
 
-                  {/* ✅ CC — seção única */}
                   {activeGroup === "CC" && (
                     <CountrySection
                       country="Especial"
@@ -766,7 +768,6 @@ export default function App() {
                     />
                   )}
 
-                  {/* ✅ SELECOES — uma seção por país com bandeira correta */}
                   {activeGroup === "SELECOES" && selectionCountries.map(country => (
                     <CountrySection
                       key={country}
@@ -781,7 +782,6 @@ export default function App() {
             </div>
           )}
 
-          {/* ── ABA DASHBOARD ── */}
           {activeTab === "dashboard" && (
             <div className="fade-in">
               <Dashboard
@@ -794,14 +794,12 @@ export default function App() {
             </div>
           )}
 
-          {/* ── ABA TROCAS ── */}
           {activeTab === "trocas" && (
             <div className="fade-in">
               <MatchesPage session={session} stickers={stickers} />
             </div>
           )}
 
-          {/* ── ABA PERFIL ── */}
           {activeTab === "perfil" && (
             <div className="fade-in">
               <ProfilePage
