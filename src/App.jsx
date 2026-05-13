@@ -137,11 +137,12 @@ function StickerCard({ sticker, isMarked, onToggle }) {
   const cd = COUNTRY_FLAGS[sticker.country] || { flag: "⚽", color: C.green };
   return (
     <button className="sticker-card" onClick={() => onToggle(sticker)} style={{
-      background: isMarked ? C.green : C.white,
-      border: `2px solid ${isMarked ? "transparent" : "#E5E7EB"}`,
+      background: sticker.is_metallic && !isMarked
+        ? "linear-gradient(135deg,#f5f0e8,#e8d5a3,#f5f0e8)" : (isMarked ? C.green : C.white),
+      border: `2px solid ${isMarked ? "transparent" : (sticker.is_metallic ? "#C9A84C" : "#E5E7EB")}`,
       borderRadius: "12px", padding: "12px 8px",
       display: "flex", flexDirection: "column", alignItems: "center", gap: "6px",
-      minHeight: "100px", width: "100%",
+      minHeight: "110px", width: "100%",
       position: "relative", overflow: "hidden",
     }}>
       <div style={{
@@ -152,9 +153,17 @@ function StickerCard({ sticker, isMarked, onToggle }) {
       <span style={{ fontSize: "10px", fontWeight: "700", color: isMarked ? "rgba(255,255,255,0.7)" : C.gray }}>
         #{sticker.number}
       </span>
-      <span style={{ fontSize: "26px", lineHeight: 1 }}>
-        {sticker.group_code === "INTRO" ? "🏆" : sticker.group_code === "CC" ? "🥤" : cd.flag}
+      <span style={{ fontSize: "28px", lineHeight: 1 }}>
+        {sticker.group_code === "INTRO" ? "🏆"
+          : sticker.group_code === "CC" ? "🥤"
+          : cd.flag}
       </span>
+      <span style={{ fontSize: "10px", fontWeight: "600", color: isMarked ? "rgba(255,255,255,0.85)" : C.gray, textAlign: "center", lineHeight: 1.2 }}>
+        {CATEGORY_LABELS[sticker.category]?.replace(/^[^\s]+\s/, "") || sticker.category}
+      </span>
+      {sticker.is_metallic && (
+        <span style={{ position: "absolute", top: "8px", right: "6px", fontSize: "12px" }}>⭐</span>
+      )}
       {isMarked && (
         <div style={{
           position: "absolute", bottom: "6px", right: "6px",
@@ -169,6 +178,7 @@ function StickerCard({ sticker, isMarked, onToggle }) {
 }
 
 function CountrySection({ country, stickers, markedSet, onToggle }) {
+  // ✅ CORREÇÃO: busca bandeira pelo nome exato do país
   const cd     = COUNTRY_FLAGS[country] || { flag: "⚽", color: C.green };
   const total  = stickers.length;
   const marked = stickers.filter(s => markedSet.has(String(s.id))).length;
@@ -203,7 +213,7 @@ function CountrySection({ country, stickers, markedSet, onToggle }) {
       </div>
       <div style={{
         background: C.white, borderRadius: "0 0 14px 14px", padding: "16px",
-        display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: "8px",
+        display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: "10px",
         border: `1px solid ${C.beigeDeep}`, borderTop: "none",
       }}>
         {stickers.map(s => (
@@ -349,19 +359,25 @@ function LoginScreen() {
                 {isNew && (
                   <div>
                     <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>Seu nome</label>
-                    <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Carlos Silva" required={isNew} style={inputStyle}
-                      onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
+                    <input type="text" value={name} onChange={e => setName(e.target.value)}
+                      placeholder="Carlos Silva" required={isNew} style={inputStyle}
+                      onFocus={e => e.target.style.borderColor = C.green}
+                      onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                   </div>
                 )}
                 <div>
                   <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>E-mail Praça Virtual</label>
-                  <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="seu@pracavirtual.com.br" required style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
+                  <input type="email" value={email} onChange={e => setEmail(e.target.value)}
+                    placeholder="seu@pracavirtual.com.br" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green}
+                    onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                 </div>
                 <div>
                   <label style={{ fontSize: "13px", fontWeight: "600", color: C.gray, display: "block", marginBottom: "6px" }}>Senha</label>
-                  <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required style={inputStyle}
-                    onFocus={e => e.target.style.borderColor = C.green} onBlur={e => e.target.style.borderColor = C.beigeDeep} />
+                  <input type="password" value={password} onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••" required style={inputStyle}
+                    onFocus={e => e.target.style.borderColor = C.green}
+                    onBlur={e => e.target.style.borderColor = C.beigeDeep} />
                 </div>
                 {error && (
                   <div style={{ background: "#FEF2F2", border: "1px solid #FCA5A5", borderRadius: "10px", padding: "12px 16px", color: "#DC2626", fontSize: "14px" }}>
@@ -370,7 +386,9 @@ function LoginScreen() {
                 )}
                 <button type="submit" disabled={loading} style={{
                   padding: "16px", marginTop: "4px",
-                  background: loading ? C.gray : (isNew ? `linear-gradient(135deg,${C.orange},#E05A2A)` : `linear-gradient(135deg,${C.green},${C.greenLight})`),
+                  background: loading ? C.gray : (isNew
+                    ? `linear-gradient(135deg,${C.orange},#E05A2A)`
+                    : `linear-gradient(135deg,${C.green},${C.greenLight})`),
                   color: C.white, border: "none", borderRadius: "12px",
                   fontSize: "16px", fontWeight: "700",
                   boxShadow: loading ? "none" : "0 4px 16px rgba(0,0,0,0.2)",
@@ -492,15 +510,26 @@ export default function App() {
       groupScrollRef.current.scrollBy({ left: dir * 200, behavior: "smooth" });
   };
 
-  // ── Lógica de grupos corrigida para INTRO / SELECOES / CC ──
-  const groups = ["INTRO", "SELECOES", "CC"];
+  // ✅ GRUPOS FIXOS — INTRO, SELECOES, CC
+  const GROUPS = ["INTRO", "SELECOES", "CC"];
 
+  // ✅ Stickers do grupo ativo
   const groupStickers = stickers.filter(s => s.group_code === activeGroup);
 
-  // Para SELECOES, agrupa por país na ordem do álbum
-  const selectionCountries = activeGroup === "SELECOES"
-    ? [...new Set(stickers.filter(s => s.group_code === "SELECOES").map(s => s.country))]
-    : [];
+  // ✅ Para SELECOES: lista de países na ordem exata do banco (sem duplicatas)
+  const selectionCountries = (() => {
+    const seen = new Set();
+    const result = [];
+    stickers
+      .filter(s => s.group_code === "SELECOES")
+      .forEach(s => {
+        if (!seen.has(s.country)) {
+          seen.add(s.country);
+          result.push(s.country);
+        }
+      });
+    return result;
+  })();
 
   const filteredBySearch = searchTerm
     ? stickers.filter(s =>
@@ -597,6 +626,7 @@ export default function App() {
           {/* ── ABA COLEÇÃO ── */}
           {activeTab === "colecao" && (
             <div className="fade-in">
+
               {/* Stats */}
               <div style={{
                 background: `linear-gradient(135deg,${C.green},#0F2A1F)`,
@@ -622,6 +652,7 @@ export default function App() {
                 background: C.white, borderRadius: "14px", padding: "16px 20px",
                 marginBottom: "24px", border: `2px solid ${C.green}`,
                 display: "flex", alignItems: "center", gap: "14px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
               }}>
                 <span style={{ fontSize: "28px" }}>✅</span>
                 <div>
@@ -642,16 +673,17 @@ export default function App() {
               <div style={{ marginBottom: "20px" }}>
                 <input
                   type="text"
-                  placeholder="🔍 Buscar por número (ex: BRA5, SC01, FWC3)..."
+                  placeholder="🔍 Buscar figurinha, país ou número..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   style={{
                     width: "100%", padding: "14px 18px", borderRadius: "12px",
                     border: `2px solid ${C.beigeDeep}`, fontSize: "15px",
                     background: C.white, outline: "none",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
                   }}
-                  onFocus={e => e.target.style.borderColor = C.green}
-                  onBlur={e => e.target.style.borderColor = C.beigeDeep}
+                  onFocus={e => { e.target.style.borderColor = C.green; e.target.style.boxShadow = "0 0 0 3px rgba(26,66,51,0.1)"; }}
+                  onBlur={e => { e.target.style.borderColor = C.beigeDeep; e.target.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)"; }}
                 />
               </div>
 
@@ -661,7 +693,7 @@ export default function App() {
                   <p style={{ color: C.gray, marginBottom: "16px", fontSize: "14px" }}>
                     {filteredBySearch.length} resultado(s) para "{searchTerm}"
                   </p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: "8px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(88px,1fr))", gap: "10px" }}>
                     {filteredBySearch.map(s => (
                       <StickerCard key={s.id} sticker={s}
                         isMarked={hasSet.has(String(s.id))} onToggle={toggleSticker} />
@@ -670,9 +702,10 @@ export default function App() {
                 </div>
               )}
 
-              {/* Navegação de grupos */}
+              {/* Navegação de grupos + conteúdo */}
               {!searchTerm && (
                 <>
+                  {/* Botões de grupo */}
                   <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "20px" }}>
                     <button onClick={() => scrollGroups(-1)} style={{
                       width: "36px", height: "36px", borderRadius: "10px",
@@ -688,7 +721,7 @@ export default function App() {
                       flex: 1, display: "flex", gap: "6px",
                       overflowX: "auto", scrollbarWidth: "none", scrollBehavior: "smooth",
                     }}>
-                      {groups.map(g => (
+                      {GROUPS.map(g => (
                         <button key={g} className="group-btn" onClick={() => setActiveGroup(g)} style={{
                           padding: "10px 18px", borderRadius: "10px", border: "none", flexShrink: 0,
                           background: activeGroup === g ? C.green : C.white,
@@ -713,7 +746,7 @@ export default function App() {
                     >▶</button>
                   </div>
 
-                  {/* Conteúdo do grupo ativo */}
+                  {/* ✅ INTRO — seção única */}
                   {activeGroup === "INTRO" && (
                     <CountrySection
                       country="Introdução"
@@ -723,6 +756,7 @@ export default function App() {
                     />
                   )}
 
+                  {/* ✅ CC — seção única */}
                   {activeGroup === "CC" && (
                     <CountrySection
                       country="Especial"
@@ -732,17 +766,16 @@ export default function App() {
                     />
                   )}
 
-                  {activeGroup === "SELECOES" && (
-                    selectionCountries.map(country => (
-                      <CountrySection
-                        key={country}
-                        country={country}
-                        stickers={stickers.filter(s => s.group_code === "SELECOES" && s.country === country)}
-                        markedSet={hasSet}
-                        onToggle={toggleSticker}
-                      />
-                    ))
-                  )}
+                  {/* ✅ SELECOES — uma seção por país com bandeira correta */}
+                  {activeGroup === "SELECOES" && selectionCountries.map(country => (
+                    <CountrySection
+                      key={country}
+                      country={country}
+                      stickers={stickers.filter(s => s.group_code === "SELECOES" && s.country === country)}
+                      markedSet={hasSet}
+                      onToggle={toggleSticker}
+                    />
+                  ))}
                 </>
               )}
             </div>

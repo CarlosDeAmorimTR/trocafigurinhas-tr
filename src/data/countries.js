@@ -1,56 +1,81 @@
 // src/data/countries.js
 
 export const COUNTRY_FLAGS = {
-  'Introdução':             { flag: '🏆', color: '#C9A84C' },
-  'México':                 { flag: '🇲🇽', color: '#006847' },
-  'África do Sul':          { flag: '🇿🇦', color: '#007A4D' },
-  'Coreia do Sul':          { flag: '🇰🇷', color: '#003478' },
-  'Tchéquia':               { flag: '🇨🇿', color: '#D7141A' },
-  'Canadá':                 { flag: '🇨🇦', color: '#FF0000' },
-  'Bósnia e Herzegovina':   { flag: '🇧🇦', color: '#002395' },
-  'Catar':                  { flag: '🇶🇦', color: '#8D1B3D' },
-  'Suíça':                  { flag: '🇨🇭', color: '#FF0000' },
-  'Brasil':                 { flag: '🇧🇷', color: '#009C3B' },
-  'Marrocos':               { flag: '🇲🇦', color: '#C1272D' },
-  'Haiti':                  { flag: '🇭🇹', color: '#00209F' },
-  'Escócia':                { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', color: '#003F87' },
-  'Estados Unidos':         { flag: '🇺🇸', color: '#3C3B6E' },
-  'Paraguai':               { flag: '🇵🇾', color: '#D52B1E' },
-  'Austrália':              { flag: '🇦🇺', color: '#00008B' },
-  'Turquia':                { flag: '🇹🇷', color: '#E30A17' },
-  'Alemanha':               { flag: '🇩🇪', color: '#000000' },
-  'Curaçao':                { flag: '🇨🇼', color: '#003DA5' },
-  'Costa do Marfim':        { flag: '🇨🇮', color: '#F77F00' },
-  'Equador':                { flag: '🇪🇨', color: '#FFD100' },
-  'Países Baixos':          { flag: '🇳🇱', color: '#AE1C28' },
-  'Japão':                  { flag: '🇯🇵', color: '#BC002D' },
-  'Suécia':                 { flag: '🇸🇪', color: '#006AA7' },
-  'Tunísia':                { flag: '🇹🇳', color: '#E70013' },
-  'Bélgica':                { flag: '🇧🇪', color: '#EF3340' },
-  'Egito':                  { flag: '🇪🇬', color: '#CE1126' },
-  'Irã':                    { flag: '🇮🇷', color: '#239F40' },
-  'Nova Zelândia':          { flag: '🇳🇿', color: '#00247D' },
-  'Espanha':                { flag: '🇪🇸', color: '#AA151B' },
-  'Cabo Verde':             { flag: '🇨🇻', color: '#003893' },
-  'Arábia Saudita':         { flag: '🇸🇦', color: '#006C35' },
-  'Uruguai':                { flag: '🇺🇾', color: '#5EB6E4' },
-  'França':                 { flag: '🇫🇷', color: '#002395' },
-  'Senegal':                { flag: '🇸🇳', color: '#00853F' },
-  'Iraque':                 { flag: '🇮🇶', color: '#007A3D' },
-  'Noruega':                { flag: '🇳🇴', color: '#EF2B2D' },
-  'Argentina':              { flag: '🇦🇷', color: '#74ACDF' },
-  'Argélia':                { flag: '🇩🇿', color: '#006233' },
-  'Áustria':                { flag: '🇦🇹', color: '#ED2939' },
-  'Jordânia':               { flag: '🇯🇴', color: '#007A3D' },
-  'Portugal':               { flag: '🇵🇹', color: '#006600' },
-  'Rep. Dem. do Congo':     { flag: '🇨🇩', color: '#007FFF' },
-  'Uzbequistão':            { flag: '🇺🇿', color: '#1EB53A' },
-  'Colômbia':               { flag: '🇨🇴', color: '#FCD116' },
-  'Inglaterra':             { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', color: '#CF142B' },
-  'Croácia':                { flag: '🇭🇷', color: '#FF0000' },
-  'Gana':                   { flag: '🇬🇭', color: '#006B3F' },
-  'Panamá':                 { flag: '🇵🇦', color: '#005293' },
-  'Especial':               { flag: '🥤', color: '#F40009' },
+  // ── Introdução / Especial ─────────────────────────────────
+  'Introdução':                { flag: '🏆', color: '#C9A84C' },
+  'Especial':                  { flag: '🥤', color: '#F40009' },
+
+  // ── Grupo A ───────────────────────────────────────────────
+  'México':                    { flag: '🇲🇽', color: '#006847' },
+  'África do Sul':             { flag: '🇿🇦', color: '#007A4D' },
+  'Coreia do Sul':             { flag: '🇰🇷', color: '#003478' },
+  'Tchéquia':                  { flag: '🇨🇿', color: '#D7141A' },
+
+  // ── Grupo B ───────────────────────────────────────────────
+  'Canadá':                    { flag: '🇨🇦', color: '#FF0000' },
+  'Bósnia e Herzegovina':      { flag: '🇧🇦', color: '#002395' },
+  'Catar':                     { flag: '🇶🇦', color: '#8D1B3D' },
+  'Suíça':                     { flag: '🇨🇭', color: '#FF0000' },
+
+  // ── Grupo C ───────────────────────────────────────────────
+  'Brasil':                    { flag: '🇧🇷', color: '#009C3B' },
+  'Marrocos':                  { flag: '🇲🇦', color: '#C1272D' },
+  'Haiti':                     { flag: '🇭🇹', color: '#00209F' },
+  'Escócia':                   { flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', color: '#003F87' },
+
+  // ── Grupo D ───────────────────────────────────────────────
+  'Estados Unidos':             { flag: '🇺🇸', color: '#3C3B6E' },
+  'Paraguai':                  { flag: '🇵🇾', color: '#D52B1E' },
+  'Austrália':                 { flag: '🇦🇺', color: '#00008B' },
+  'Turquia':                   { flag: '🇹🇷', color: '#E30A17' },
+
+  // ── Grupo E ───────────────────────────────────────────────
+  'Alemanha':                  { flag: '🇩🇪', color: '#000000' },
+  'Curaçao':                   { flag: '🇨🇼', color: '#003DA5' },
+  'Costa do Marfim':           { flag: '🇨🇮', color: '#F77F00' },
+  'Equador':                   { flag: '🇪🇨', color: '#FFD100' },
+
+  // ── Grupo F ───────────────────────────────────────────────
+  'Países Baixos':             { flag: '🇳🇱', color: '#AE1C28' },
+  'Japão':                     { flag: '🇯🇵', color: '#BC002D' },
+  'Suécia':                    { flag: '🇸🇪', color: '#006AA7' },
+  'Tunísia':                   { flag: '🇹🇳', color: '#E70013' },
+
+  // ── Grupo G ───────────────────────────────────────────────
+  'Bélgica':                   { flag: '🇧🇪', color: '#EF3340' },
+  'Egito':                     { flag: '🇪🇬', color: '#CE1126' },
+  'Irã':                       { flag: '🇮🇷', color: '#239F40' },
+  'Nova Zelândia':              { flag: '🇳🇿', color: '#00247D' },
+
+  // ── Grupo H ───────────────────────────────────────────────
+  'Espanha':                   { flag: '🇪🇸', color: '#AA151B' },
+  'Cabo Verde':                { flag: '🇨🇻', color: '#003893' },
+  'Arábia Saudita':            { flag: '🇸🇦', color: '#006C35' },
+  'Uruguai':                   { flag: '🇺🇾', color: '#5EB6E4' },
+
+  // ── Grupo I ───────────────────────────────────────────────
+  'França':                    { flag: '🇫🇷', color: '#002395' },
+  'Senegal':                   { flag: '🇸🇳', color: '#00853F' },
+  'Iraque':                    { flag: '🇮🇶', color: '#007A3D' },
+  'Noruega':                   { flag: '🇳🇴', color: '#EF2B2D' },
+
+  // ── Grupo J ───────────────────────────────────────────────
+  'Argentina':                 { flag: '🇦🇷', color: '#74ACDF' },
+  'Argélia':                   { flag: '🇩🇿', color: '#006233' },
+  'Áustria':                   { flag: '🇦🇹', color: '#ED2939' },
+  'Jordânia':                  { flag: '🇯🇴', color: '#007A3D' },
+
+  // ── Grupo K ───────────────────────────────────────────────
+  'Portugal':                  { flag: '🇵🇹', color: '#006600' },
+  'Rep. Dem. do Congo':        { flag: '🇨🇩', color: '#007FFF' },
+  'Uzbequistão':               { flag: '🇺🇿', color: '#1EB53A' },
+  'Colômbia':                  { flag: '🇨🇴', color: '#FCD116' },
+
+  // ── Grupo L ───────────────────────────────────────────────
+  'Inglaterra':                { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', color: '#CF142B' },
+  'Croácia':                   { flag: '🇭🇷', color: '#FF0000' },
+  'Gana':                      { flag: '🇬🇭', color: '#006B3F' },
+  'Panamá':                    { flag: '🇵🇦', color: '#005293' },
 };
 
 export const GROUP_NAMES = {
